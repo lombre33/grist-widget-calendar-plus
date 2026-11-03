@@ -26,7 +26,8 @@ calendrier/              le module (ce qui ira dans le kit, voie A) : n'importe 
     placement.js         barres multi-jours par ligne de semaine, « +n », ordre stable
     deplacement.js       déplacer un jour : l'écart Début -> Fin est conservé
   vue/                   DOM par `h()` du kit (jamais d'HTML interprété), glisser-déposer, clavier
-  calendrier.js          API : creerCalendrier(element, options) -> { definir, aujourdhui, aller, detruire }
+  index.js               la porte d'entrée (section 3) : creerCalendrier(rappels) -> { element, definir, aller, aujourdhui, detruire }
+  lien-kit.js            le seul fichier qui importe le kit (GFS n'y réécrit que ces chemins au déplacement)
 app/                     l'hôte autonome : adaptateur Grist, correspondance de colonnes, GfsLink
 index.html, gfs.json     la page publiée sur GitHub Pages, le manifeste de GFS
 test/                    node --test (noyau, normalisation, adaptateur) ; navigateur/ (Playwright)
@@ -35,6 +36,17 @@ test/                    node --test (noyau, normalisation, adaptateur) ; naviga
 Le dossier `calendrier/` n'importe **rien** hors de `kit/` : il se déplace tel quel dans le kit si GFS choisit la voie A, et reste dans l'app si c'est la voie B. Le choix (question 11 de Tuesday) ne change donc pas le code.
 
 ## 3. Le contrat du module (réponse au fil Tuesday)
+
+**Porte d'entrée unique** (accordée avec le fil Tuesday le 03/11, consigne 006 de GFS, point 4) :
+
+```js
+import { creerCalendrier } from './calendrier/index.js';   // dans le kit : js/calendrier/index.js
+const calendrier = creerCalendrier({ onOuvrir, onDeplacer, onAjouter, onEtat });
+conteneur.append(calendrier.element);                       // le module rend son élément, l'hôte le pose
+calendrier.definir({ lignes, options });                    // peut être rappelé à chaque changement de données
+```
+
+`creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller(jour), aujourdhui(), detruire() }`. Le module ne touche ni `document.body` ni `window` : tout vit dans `element`. Sa feuille est `css/calendrier.css` (liée par l'hôte, après `tokens.css`).
 
 Entrée : `definir({ lignes, options })`.
 
@@ -49,7 +61,7 @@ ligne = { id, titre, debut, fin, avecHeure, statut, couleur, responsables, modif
 - `modifiable: false` sur une ligne ou `lectureSeule` en option : glisser grisé, avec la raison dite en infobulle.
 - `options` : `debutSemaine` (1 = lundi, par défaut), `vue` (`mois` | `semaine`), `jourCourant`, `langue`, `maintenant` (une horloge injectée : c'est ce qui rend « s'ouvre sur aujourd'hui » testable).
 
-Sortie (rappels, l'hôte répond) :
+Sortie (les rappels donnés à `creerCalendrier`, l'hôte répond) :
 
 - `onOuvrir(id)` : clic sur un événement.
 - `onDeplacer({ id, debut, fin })` : renvoie une promesse ; si l'hôte la refuse, l'événement **revient à sa place** (le module ne garde aucun état faux). **Annuler / Rétablir est à l'hôte** (Tuesday a le sien ; seul, Calendrier+ branche celui de Grist par `UpdateRecord`).
