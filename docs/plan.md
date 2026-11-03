@@ -87,11 +87,12 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 1. **Socle** : `CLAUDE.md`, `LICENSE`, `.nojekyll`, `kit/` en sous-module (v0.2.0), `package.json` (`GPL-3.0-only`, scripts de test), hygiène, workflow Pages. *(fait : `LICENSE`, `.nojekyll`, ce plan)*
 2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement`.
 3. **Vue mois** sur données de démonstration (page sans Grist), charte, clair/sombre, fr/en.
-4. **Vue semaine**, « +n », clavier.
-5. **Glisser-déposer** et plateau « Sans date ».
-6. **App autonome** : adaptateur Grist, correspondance de colonnes, écritures, lecture seule.
-7. **GFS** : `gfs.json`, `GfsLink`, `GFS-ETAT.md`, mesure dans un vrai Grist.
-8. **Tuesday** : module monté dans la vue Calendrier de Tuesday (voie A ou B selon la réponse de GFS).
+4. **Version embarquable, tôt** (demande d'Antoine du 03/11 : Tuesday affiche Calendar+ dans sa vue Calendrier dès maintenant, même vide ou en POC) : la page publiée accepte `?embarque=1` et parle à son hôte par messages (`definir`, `onOuvrir`, `onDeplacer`, `onAjouter`, avec le contrat de la section 3), sans Grist ni barre propre. Elle sert de POC dans un sous-cadre de Tuesday sans attendre la réponse de GFS (voie A ou B), puis le même contrat passe en module quand GFS aura choisi.
+5. **Vue semaine**, « +n », clavier.
+6. **Glisser-déposer** et plateau « Sans date ».
+7. **App autonome** : adaptateur Grist, correspondance de colonnes, écritures, lecture seule.
+8. **GFS** : `gfs.json`, `GfsLink`, `GFS-ETAT.md`, mesure dans un vrai Grist.
+9. **Tuesday** : module monté dans la vue Calendrier de Tuesday (voie A ou B selon la réponse de GFS).
 
 Chaque lot : une passe de tests ciblée, push sur `main`, `?v=` monté, run Pages vert et changement vu en ligne.
 
