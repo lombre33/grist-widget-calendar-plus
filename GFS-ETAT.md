@@ -1,6 +1,6 @@
 # GFS-ETAT : Calendrier+
 
-Mis à jour le 2026-11-03, au commit `b96b04d` (le dernier commit de code que cette page décrit : aucun code encore, le plan et le socle seulement).
+Mis à jour le 2026-11-03, au commit `79913e1` (le dernier commit de code que cette page décrit : le noyau sans DOM, `calendrier/noyau/`, et ses essais ; pas encore de vue).
 
 ## Consignes
 - 006 · lue · voie A : le module s'écrit dans `calendrier/` de ce dépôt, GFS le déplace dans le kit (`js/calendrier/index.js`, `css/calendrier.css`) ; porte d'entrée accordée avec Tuesday : `creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller, aujourdhui, detruire }` (`docs/plan.md`, section 3) ; tous les imports du kit passent par un seul fichier, `calendrier/lien-kit.js`
