@@ -25,6 +25,7 @@ calendrier/              le module (ce qui ira dans le kit, voie A) : n'importe 
     evenements.js        lignes normalisées -> événements ; sans date, début seul, fin seule
     placement.js         barres multi-jours par ligne de semaine, « +n », ordre stable
     deplacement.js       déplacer un jour : l'écart Début -> Fin est conservé
+    horaire.js           blocs horaires d'un jour : colonnes des blocs qui se chevauchent, pas de 15 min, déplacement d'heure
   vue/                   DOM par `h()` du kit (jamais d'HTML interprété), glisser-déposer, clavier
   index.js               la porte d'entrée (section 3) : creerCalendrier(rappels) -> { element, definir, aller, aujourdhui, detruire }
   lien-kit.js            le seul fichier qui importe le kit (GFS n'y réécrit que ces chemins au déplacement)
@@ -73,7 +74,8 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 ## 4. Périmètre par paliers
 
 **V1 : « Voir ce qui tombe quand » (Tuesday en a besoin)**
-- Mois et Semaine, lundi, aujourd'hui, numéros de semaine, navigation et « Aujourd'hui ».
+- Mois, Semaine et **Jour**, lundi, aujourd'hui, numéros de semaine, navigation et « Aujourd'hui ».
+- **Heures (choix d'Antoine, 04/11)** : les lignes avec heure (`AAAA-MM-JJTHH:mm`, colonne DateTime) s'affichent en blocs horaires dans les vues Semaine et Jour, au-dessus d'une bande « Toute la journée » pour les jours entiers ; les blocs qui se chevauchent se partagent la largeur ; glisser un bloc change le jour et l'heure (pas de 15 minutes, durée conservée) ; dans le mois, l'heure précède le titre.
 - Événements d'un jour et multi-jours (barres), « +n » avec liste du jour.
 - Glisser un événement sur un autre jour (écart conservé) ; plateau « Sans date » et dépôt sur un jour.
 - « + Tâche » et clic sur un jour : demander à l'hôte d'ajouter.
@@ -81,7 +83,7 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 - App autonome : choix de la table par la liste avec recherche de la charte, correspondance de colonnes (Titre, Début, Fin, Couleur, Personne ; obligatoires signalés, colonnes reconnues déjà choisies, conséquences dites en une phrase), écritures Début/Fin seulement.
 - `gfs.json`, `GfsLink` (langue, zone de la barre, stockage), page publiée sur Pages.
 
-**V1.1** : étirer une barre par ses bords (changer Fin ou Début) ; vue Jour avec heures (colonnes DateTime) ; filtre par personne ; recherche.
+**V1.1** : étirer une barre ou un bloc par ses bords (changer Fin ou Début) ; filtre par personne ; recherche.
 
 **V2** : plusieurs sources superposées (deux tables, une couleur chacune : le « calendrier d'équipe » de Monday) ; export `.ics` (extension GFS, donc chargée au premier usage) ; récurrence en lecture seule (l'écriture reste à Grist).
 
@@ -97,10 +99,10 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 ## 6. Ordre des lots
 
 1. **Socle** : `CLAUDE.md`, `LICENSE`, `.nojekyll`, `kit/` en sous-module (v0.2.0), `package.json` (`GPL-3.0-only`, scripts de test), hygiène, workflow Pages. *(fait : `LICENSE`, `.nojekyll`, ce plan)*
-2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement`.
+2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement` *(fait, 79913e1)* ; puis `horaire` (blocs horaires, déplacement d'heure) avec ses essais.
 3. **Vue mois** sur données de démonstration (page sans Grist), charte, clair/sombre, fr/en.
 4. **Version embarquable, tôt** (demande d'Antoine du 03/11 : Tuesday affiche Calendar+ dans sa vue Calendrier dès maintenant, même vide ou en POC) : la page publiée accepte `?embarque=1` et parle à son hôte par messages (`definir`, `onOuvrir`, `onDeplacer`, `onAjouter`, avec le contrat de la section 3), sans Grist ni barre propre. Elle sert de POC dans un sous-cadre de Tuesday sans attendre la réponse de GFS (voie A ou B), puis le même contrat passe en module quand GFS aura choisi.
-5. **Vue semaine**, « +n », clavier.
+5. **Vues semaine et jour** (blocs horaires, bande « Toute la journée »), « +n », clavier.
 6. **Glisser-déposer** et plateau « Sans date ».
 7. **App autonome** : adaptateur Grist, correspondance de colonnes, écritures, lecture seule.
 8. **GFS** : `gfs.json`, `GfsLink`, `GFS-ETAT.md`, mesure dans un vrai Grist.
@@ -113,7 +115,7 @@ Chaque lot : une passe de tests ciblée, push sur `main`, `?v=` monté, run Page
 | # | Question | Défaut pris |
 |---|---|---|
 | 1 | Nom | Calendrier+ / Calendar+, id GFS `calendrier`, clés de réglages préfixées `cal_` |
-| 2 | Heures en V1 | Non : jours entiers d'abord ; DateTime lu et affiché au jour, vue Jour en V1.1 |
+| 2 | Heures en V1 | **Oui (carte d'Antoine, 04/11)** : vue Jour et blocs horaires dès la V1 ; pas de 15 minutes ; fuseau : l'hôte convertit, le module ne voit que des heures locales |
 | 3 | Voie A ou B pour Tuesday | A (module sans DOM global), réponse attendue de GFS |
 | 4 | Correspondance de colonnes | La fenêtre de la charte, la même que Tuesday ; réglages écrits seulement par un geste (rappel « Enregistrer ») |
 | 5 | Fin inclusive | Oui |
