@@ -9,6 +9,9 @@ Mis à jour le 2026-11-04, au commit `531e0cd` (le dernier commit de code que ce
 - 009 · lue · le labo sera `test/grist/lancer-grist.sh` du dépôt Tuesday, avec `gristlabs/grist:1.7.19` (la version du Grist du porteur) ; rien d'autre
 - 010 · lue · `kit/` est à `8afa569` (kit 0.6.0) ; la feuille du module (`css/calendrier.css`) lira les jetons de la charte et les jetons de forme avec leur valeur d'origine en repli (`var(--radius-md, 10px)`), fond `--bg`, jamais de couleur en dur (essai d'hygiène en place) ; `Ambiance.start()` sera appelé par l'hôte (l'app autonome, au lot 7), pas par le module ; les couleurs de Grist (choix) restent des données, jamais écrites par le module ; « faite » à l'entrée de l'app autonome, avec l'essai de couleurs
 
+- 012 · lue · `kit/` à `336baf4`, `calendrier/` retiré, la page monte le module du kit (`kit/js/calendrier/index.js`, `kit/css/calendrier.css`) : en cours, « faite » au commit qui suit
+- 013 · lue · la consigne est pour Tuesday ; chez Calendrier+, rien n'est en attente d'enregistrement (la démonstration n'écrit nulle part) : à rejouer quand l'adaptateur Grist existera (une saisie rapide ou un déplacement en cours d'écriture devra finir avant `{ ferme: true }`)
+
 ## Changements qui touchent GFS
 - Aucun (pas de `gfs.json` ni de table ; Calendrier+ n'en crée aucune ; clés de réglages préfixées `cal_`, clés de stockage `cal_*`)
 
