@@ -66,7 +66,7 @@ Sortie (les rappels donnés à `creerCalendrier`, l'hôte répond) :
 
 - `onOuvrir(id)` : clic sur un événement.
 - `onDeplacer({ id, debut, fin })` : renvoie une promesse ; si l'hôte la refuse, l'événement **revient à sa place** (le module ne garde aucun état faux). **Annuler / Rétablir est à l'hôte** (Tuesday a le sien ; seul, Calendrier+ branche celui de Grist par `UpdateRecord`).
-- `onAjouter({ debut })` : clic sur un jour vide, ou bouton « + Tâche ».
+- `onAjouter({ debut, titre })` : clic sur un jour vide, ou bouton « + Tâche ». **Saisie rapide (choix d'Antoine, 04/11)** : le module ouvre sur place un champ de titre dans le jour (ou à l'heure cliquée dans les vues Semaine et Jour) ; Entrée envoie `{ debut, titre }`, Échap annule, un titre vide n'envoie rien. L'hôte crée la ligne et rend une promesse ; refusée, le champ revient avec le titre gardé.
 - `onEtat({ vue, jourCourant })` : pour que l'hôte retienne la vue par `GfsLink.storageSet` (jamais écrit dans les réglages de la vue sans geste).
 
 Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeure` et `modifiable`, et la promesse de retour sur `onDeplacer`.
@@ -119,3 +119,4 @@ Chaque lot : une passe de tests ciblée, push sur `main`, `?v=` monté, run Page
 | 3 | Voie A ou B pour Tuesday | **A, module du kit, tout de suite** (GFS, 03/11 ; Antoine, 04/11) : pas de sous-cadre ni de page `?embarque=1` |
 | 4 | Correspondance de colonnes | La fenêtre de la charte, la même que Tuesday ; réglages écrits seulement par un geste (rappel « Enregistrer ») |
 | 5 | Fin inclusive | Oui |
+| 6 | Ajout depuis un jour vide | **Saisie rapide du titre** sur place (carte d'Antoine, 04/11) ; la fiche complète reste chez l'hôte (clic sur l'événement créé) |
