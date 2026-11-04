@@ -1,6 +1,6 @@
 # GFS-ETAT : Calendrier+
 
-Mis à jour le 2026-11-04, au commit `531e0cd` (le dernier commit de code que cette page décrit : le module avec les heures).
+Mis à jour le 2026-11-04, au commit `9d8fe29` (le dernier commit de code que cette page décrit : l'app monte le module du kit).
 
 ## Consignes
 - 006 · lue · voie A : le module s'écrit dans `calendrier/` de ce dépôt, GFS le déplace dans le kit (`js/calendrier/index.js`, `css/calendrier.css`) ; porte d'entrée accordée avec Tuesday : `creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller, aujourdhui, detruire }` (`docs/plan.md`, section 3) ; tous les imports du kit passent par un seul fichier, `calendrier/lien-kit.js`
@@ -9,7 +9,7 @@ Mis à jour le 2026-11-04, au commit `531e0cd` (le dernier commit de code que ce
 - 009 · lue · le labo sera `test/grist/lancer-grist.sh` du dépôt Tuesday, avec `gristlabs/grist:1.7.19` (la version du Grist du porteur) ; rien d'autre
 - 010 · lue · `kit/` est à `8afa569` (kit 0.6.0) ; la feuille du module (`css/calendrier.css`) lira les jetons de la charte et les jetons de forme avec leur valeur d'origine en repli (`var(--radius-md, 10px)`), fond `--bg`, jamais de couleur en dur (essai d'hygiène en place) ; `Ambiance.start()` sera appelé par l'hôte (l'app autonome, au lot 7), pas par le module ; les couleurs de Grist (choix) restent des données, jamais écrites par le module ; « faite » à l'entrée de l'app autonome, avec l'essai de couleurs
 
-- 012 · lue · `kit/` à `336baf4`, `calendrier/` retiré, la page monte le module du kit (`kit/js/calendrier/index.js`, `kit/css/calendrier.css`) : en cours, « faite » au commit qui suit
+- 012 · faite · `9d8fe29` · `kit/` à `336baf4` (0.8.0), `calendrier/` retiré, la page importe `kit/js/calendrier/index.js` et lie `kit/css/calendrier.css?v=`, essais de l'hôte gardés (`test/app.test.mjs`, `test/navigateur/app.test.mjs`) ; la réserve du logo et de la roue à droite de la barre du calendrier est dans `css/app.css`, pas dans le module
 - 013 · lue · la consigne est pour Tuesday ; chez Calendrier+, rien n'est en attente d'enregistrement (la démonstration n'écrit nulle part) : à rejouer quand l'adaptateur Grist existera (une saisie rapide ou un déplacement en cours d'écriture devra finir avant `{ ferme: true }`)
 
 ## Changements qui touchent GFS
@@ -19,5 +19,4 @@ Mis à jour le 2026-11-04, au commit `531e0cd` (le dernier commit de code que ce
 - Aucune pour l'instant
 
 ## Demandes à GFS
-- **Module prêt (version 2, avec les heures)** · commit `531e0cd` · mêmes dossier, entrée et feuille que ci-dessous ; s'ajoutent : `calendrier/noyau/horaire.js`, `calendrier/vue/horaire.js`, `calendrier/vue/heures.js`, les vues Semaine et Jour avec blocs horaires (au quart d'heure, glisser changeant le jour et l'heure, ajout à l'heure cliquée, bande des jours entiers) ; essais : 81 sous Node (`npm test`) et 31 sous Chromium (`npm run test:navigateur`). La version 2 remplace la première : c'est elle que GFS peut déplacer dans le kit. Reste côté module : étirer une barre ou un bloc par ses bords (V1.1).
-- **Module prêt (première version)** · commit `5043986` · dossier `calendrier/` (entrée `calendrier/index.js` ; le seul import du kit est `calendrier/lien-kit.js`) · feuille `calendrier/css/calendrier.css` (à ranger en `css/calendrier.css` du kit, après `tokens.css`) · essais : `test/*.test.mjs` (noyau et hygiène, `npm test`, Node) et `test/navigateur/essais.test.mjs` (22 essais Chromium à 700 × 400, `npm run test:navigateur`, Playwright). Porte d'entrée : `creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller, aujourdhui, detruire }` (`docs/plan.md`, section 3). Ce que la version fait : mois et semaine au lundi, aujourd'hui à l'ouverture, numéros de semaine ISO, barres sur plusieurs jours avec « +n » et liste du jour, glisser un événement sur un jour (écart gardé, retour si l'hôte refuse), plateau « Sans date », saisie rapide du titre, lecture seule grisée avec sa raison, français et anglais, clair et sombre. Ce qu'elle ne faisait pas encore (fait dans la version 2) : les heures en blocs horaires et la vue Jour. Elle peut remplacer la grille provisoire de Tuesday sans lui faire perdre le glisser-déposer ni le plateau . La page d'essai du navigateur lit `kit/css/tokens.css` (sous-module `8afa569`), rien d'autre du kit n'est lu hors de `lien-kit.js`.
+- Aucune. Constats de GFS (012, point 4), sans changement demandé pour l'instant : à 658 px la barre d'outils passe sur deux lignes en vue Jour ; la sixième semaine du mois est coupée par le bas du panneau à 700 × 400 (elle se rejoint à la molette). Si le porteur veut les changer : demande ici, avec le commit.
