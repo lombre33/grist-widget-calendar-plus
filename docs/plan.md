@@ -101,7 +101,7 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 1. **Socle** : `CLAUDE.md`, `LICENSE`, `.nojekyll`, `kit/` en sous-module (v0.2.0), `package.json` (`GPL-3.0-only`, scripts de test), hygiène, workflow Pages. *(fait : `LICENSE`, `.nojekyll`, ce plan)*
 2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement` *(fait, 79913e1)* ; puis `horaire` (blocs horaires, déplacement d'heure) avec ses essais.
 3. **Vue mois** sur données de démonstration (page sans Grist), charte, clair/sombre, fr/en.
-4. **Version embarquable, tôt** (demande d'Antoine du 03/11 : Tuesday affiche Calendar+ dans sa vue Calendrier dès maintenant, même vide ou en POC) : la page publiée accepte `?embarque=1` et parle à son hôte par messages (`definir`, `onOuvrir`, `onDeplacer`, `onAjouter`, avec le contrat de la section 3), sans Grist ni barre propre. Elle sert de POC dans un sous-cadre de Tuesday sans attendre la réponse de GFS (voie A ou B), puis le même contrat passe en module quand GFS aura choisi.
+4. **Premier module prêt pour le kit, tôt** (choix d'Antoine du 04/11 : « module du kit tout de suite », pas de sous-cadre) : dès que la vue mois tient (lot 3) avec la porte d'entrée de la section 3, `GFS-ETAT.md` dit « module prêt » (commit, dossier `calendrier/`, `css/calendrier.css`, essais) ; GFS le déplace dans le kit (`js/calendrier/index.js`) et Tuesday l'affiche dans sa vue Calendrier, même en POC. Les vues semaine et jour, le glisser et le reste arrivent ensuite par versions du kit.
 5. **Vues semaine et jour** (blocs horaires, bande « Toute la journée »), « +n », clavier.
 6. **Glisser-déposer** et plateau « Sans date ».
 7. **App autonome** : adaptateur Grist, correspondance de colonnes, écritures, lecture seule.
@@ -116,6 +116,6 @@ Chaque lot : une passe de tests ciblée, push sur `main`, `?v=` monté, run Page
 |---|---|---|
 | 1 | Nom | Calendrier+ / Calendar+, id GFS `calendrier`, clés de réglages préfixées `cal_` |
 | 2 | Heures en V1 | **Oui (carte d'Antoine, 04/11)** : vue Jour et blocs horaires dès la V1 ; pas de 15 minutes ; fuseau : l'hôte convertit, le module ne voit que des heures locales |
-| 3 | Voie A ou B pour Tuesday | A (module sans DOM global), réponse attendue de GFS |
+| 3 | Voie A ou B pour Tuesday | **A, module du kit, tout de suite** (GFS, 03/11 ; Antoine, 04/11) : pas de sous-cadre ni de page `?embarque=1` |
 | 4 | Correspondance de colonnes | La fenêtre de la charte, la même que Tuesday ; réglages écrits seulement par un geste (rappel « Enregistrer ») |
 | 5 | Fin inclusive | Oui |
