@@ -99,10 +99,10 @@ Deux ajouts à proposer au fil Tuesday par rapport à leur brouillon : `avecHeur
 ## 6. Ordre des lots
 
 1. **Socle** : `CLAUDE.md`, `LICENSE`, `.nojekyll`, `kit/` en sous-module (v0.2.0), `package.json` (`GPL-3.0-only`, scripts de test), hygiène, workflow Pages. *(fait : `LICENSE`, `.nojekyll`, ce plan)*
-2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement` *(fait, 79913e1)* ; puis `horaire` (blocs horaires, déplacement d'heure) avec ses essais.
+2. **Noyau + tests** : `dates`, `evenements`, `placement`, `deplacement` *(fait, 79913e1)* ; `horaire` (blocs horaires, déplacement d'heure) avec ses essais *(fait)*.
 3. **Vue mois** sur données de démonstration (page sans Grist), charte, clair/sombre, fr/en.
 4. **Premier module prêt pour le kit, tôt** (choix d'Antoine du 04/11 : « module du kit tout de suite », pas de sous-cadre) : dès que la vue mois tient (lot 3) avec la porte d'entrée de la section 3, `GFS-ETAT.md` dit « module prêt » (commit, dossier `calendrier/`, `css/calendrier.css`, essais) ; GFS le déplace dans le kit (`js/calendrier/index.js`) et Tuesday l'affiche dans sa vue Calendrier, même en POC. Les vues semaine et jour, le glisser et le reste arrivent ensuite par versions du kit.
-5. **Vues semaine et jour** (blocs horaires, bande « Toute la journée »), « +n », clavier.
+5. **Vues semaine et jour** (blocs horaires, bande « Toute la journée »), « +n », clavier *(fait, avec le glisser du lot 6 ; reste le clavier complet dans la grille)*.
 6. **Glisser-déposer** et plateau « Sans date ».
 7. **App autonome** : adaptateur Grist, correspondance de colonnes, écritures, lecture seule.
 8. **GFS** : `gfs.json`, `GfsLink`, `GFS-ETAT.md`, mesure dans un vrai Grist.
