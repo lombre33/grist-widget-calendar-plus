@@ -14,7 +14,7 @@ Widget de calendrier de la suite Grist Factory Suite (GFS). Il marche seul sur n
 ## Règles de GFS (voir `lombre33/grist-widget-GFS`, `docs/guide-des-apps.md`)
 
 - Modules ES, HTML et CSS, aucun framework, aucune étape de construction ; ce qu'un outil génère est commité. GPL 3.0 (`LICENSE` octet pour octet, `"license": "GPL-3.0-only"`).
-- `kit/` en sous-module (`lombre33/grist-factory-kit`) ; une app n'importe jamais une autre app. **Le dossier `calendrier/` n'importe rien hors de `kit/`** et ne parle jamais à Grist.
+- `kit/` en sous-module (`lombre33/grist-factory-kit`) ; une app n'importe jamais une autre app. **Le module du calendrier est dans le kit** (`kit/js/calendrier/`, `kit/css/calendrier.css`, consigne 012 de GFS) : cette app le monte, elle ne le copie pas et ne le modifie pas ; seul GFS pousse dans le kit, un changement du module est une demande dans « Demandes à GFS » de `GFS-ETAT.md` (commit, ce qui change, pourquoi). Le module ne parle jamais à Grist : l'hôte (`app/`) lit et écrit.
 - Pas de calcul dans le widget ; changements de données additifs ; ne jamais écrire une colonne absente ; aucune table créée (ce widget n'en crée aucune).
 - Réglages de la vue jamais écrits sans un geste de la personne ; clés préfixées `cal_`.
 - `addEventListener('message')`, jamais `window.onmessage =`. Stockage du navigateur dans des `try/catch`.

@@ -2,7 +2,9 @@
 html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
 #app { position: relative; box-sizing: border-box; height: 100%; min-height: 100vh;
   padding: var(--app-g-haut, 0px) var(--app-g-droite, 0px) var(--app-g-bas, 0px) var(--app-g-gauche, 0px);
-  --cal-reserve-droite: 64px; }
+  --app-reserve-droite: 64px; }
+/* Le module (kit/css/calendrier.css) ne sait rien du logo ni de la roue : c'est l'hôte qui réserve leur place à droite de la barre du calendrier. */
+#app .cal-barre { padding-right: calc(12px + var(--app-reserve-droite, 0px)); }
 #calendrier { height: 100%; }
 /* Le logo : un rond de 20 px, opacité .85, à 10 px du coin ; la roue juste avant lui. Ils se calent sur la ligne de la barre du calendrier (28 px de haut, 8 px de marge). */
 #app-logo { position: absolute; z-index: var(--z-floating-toolbar); top: calc(12px + var(--app-g-haut, 0px)); right: calc(10px + var(--app-g-droite, 0px)); width: 20px; height: 20px; border-radius: 50%; opacity: .85; }

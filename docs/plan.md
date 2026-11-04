@@ -14,6 +14,8 @@ Il travaille **avec** la donnée de Grist : il ne crée aucune table, n'écrit j
 
 Références : Tuesday `docs/cahier-des-charges.md` 6.3 et `docs/integration-suite.md` 1 ; écran cible : onglet Calendrier de `maquettes/index.html` de Tuesday ; règles : `CLAUDE.md` de ce dépôt.
 
+> **Mise à jour du 04/11 (consigne 012 de GFS).** Le dossier `calendrier/` décrit ci-dessous est désormais celui du kit (`kit/js/calendrier/`, version 0.8.0, commit `336baf4`) : ce dépôt ne garde que l'hôte (`app/`, `css/`, `index.html`). Pour changer le module : une demande dans « Demandes à GFS ».
+
 ## 2. Architecture : un noyau qui ne connaît pas Grist
 
 Une seule règle structure tout : **le module de calendrier ne parle jamais à Grist**. L'hôte (l'app Calendrier+ seule, ou Tuesday) lui donne des lignes et écrit dans Grist à sa place.

@@ -6,7 +6,7 @@ import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const racine = new URL('../', import.meta.url).pathname;
-const DOSSIERS = ['app', 'calendrier', 'kit/js'];
+const DOSSIERS = ['app', 'kit/js'];
 
 function modules(dossier, sortie = []) {
   for (const nom of readdirSync(dossier)) {

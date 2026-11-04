@@ -1,5 +1,5 @@
 // Les lignes de démonstration (hors de Grist) : des dates relatives à aujourd'hui, pour que le calendrier ne s'ouvre jamais sur un mois vide. Rien n'est écrit nulle part.
-import { ajouterJours, aujourdhui, debutDeSemaine } from '../calendrier/noyau/dates.js';
+import { ajouterJours, aujourdhui, debutDeSemaine } from '../kit/js/calendrier/noyau/dates.js';
 
 export function lignesDeDemonstration(maintenant) {
   const lundi = debutDeSemaine(aujourdhui(maintenant));

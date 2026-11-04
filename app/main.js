@@ -5,7 +5,7 @@ import { h } from '../kit/js/dom.js';
 import { GfsLink } from '../kit/js/gfs-link.js';
 import { I18n } from '../kit/js/i18n.js';
 import { Theme } from '../kit/js/theme.js';
-import { creerCalendrier } from '../calendrier/index.js';
+import { creerCalendrier } from '../kit/js/calendrier/index.js';
 import { monterCoin, laisserLibre } from './chrome.js';
 import { lignesDeDemonstration } from './demo.js';
 import { creerReglages } from './reglages.js';

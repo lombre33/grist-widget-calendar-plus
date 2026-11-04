@@ -7,54 +7,54 @@
 <meta name="description" content="Calendrier+ : un widget Grist de calendrier (mois, semaine, jour) qui travaille avec vos tables. / A Grist calendar widget (month, week, day) that works with your own tables.">
 <!-- Politique de sécurité du contenu stricte : aucun style en ligne (le CSSOM suffit), aucun script en ligne hors la carte d'importation citée par son empreinte (outils/versionner.mjs la recalcule),
      aucune police, image ni feuille d'un autre site. 'unsafe-eval' reste pour le fichier d'API des widgets que Grist sert (docs.getgrist.com/grist-plugin-api.js). -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-eval' https://docs.getgrist.com/grist-plugin-api.js 'sha256-vGt633Dn3wU0I7QYvoo7icQToZ2NgaalPAxpcO/ptA4='; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'">
-<link rel="stylesheet" href="kit/css/tokens.css?v=0.1.0">
-<link rel="stylesheet" href="kit/css/windows.css?v=0.1.0">
-<link rel="stylesheet" href="calendrier/css/calendrier.css?v=0.1.0">
-<link rel="stylesheet" href="css/app.css?v=0.1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-eval' https://docs.getgrist.com/grist-plugin-api.js 'sha256-UiY0/WeZvrsh/W40N3ijXHIke4jufl69HQ9uvsQGGqU='; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'">
+<link rel="stylesheet" href="kit/css/tokens.css?v=0.1.1">
+<link rel="stylesheet" href="kit/css/windows.css?v=0.1.1">
+<link rel="stylesheet" href="kit/css/calendrier.css?v=0.1.1">
+<link rel="stylesheet" href="css/app.css?v=0.1.1">
 <script type="importmap">
 {
   "imports": {
-    "./app/chrome.js": "./app/chrome.js?v=0.1.0",
-    "./app/demo.js": "./app/demo.js?v=0.1.0",
-    "./app/main.js": "./app/main.js?v=0.1.0",
-    "./app/reglages.js": "./app/reglages.js?v=0.1.0",
-    "./app/textes.js": "./app/textes.js?v=0.1.0",
-    "./calendrier/index.js": "./calendrier/index.js?v=0.1.0",
-    "./calendrier/lien-kit.js": "./calendrier/lien-kit.js?v=0.1.0",
-    "./calendrier/noyau/dates.js": "./calendrier/noyau/dates.js?v=0.1.0",
-    "./calendrier/noyau/deplacement.js": "./calendrier/noyau/deplacement.js?v=0.1.0",
-    "./calendrier/noyau/evenements.js": "./calendrier/noyau/evenements.js?v=0.1.0",
-    "./calendrier/noyau/format.js": "./calendrier/noyau/format.js?v=0.1.0",
-    "./calendrier/noyau/horaire.js": "./calendrier/noyau/horaire.js?v=0.1.0",
-    "./calendrier/noyau/navigation.js": "./calendrier/noyau/navigation.js?v=0.1.0",
-    "./calendrier/noyau/placement.js": "./calendrier/noyau/placement.js?v=0.1.0",
-    "./calendrier/textes.js": "./calendrier/textes.js?v=0.1.0",
-    "./calendrier/vue/barre.js": "./calendrier/vue/barre.js?v=0.1.0",
-    "./calendrier/vue/flottant.js": "./calendrier/vue/flottant.js?v=0.1.0",
-    "./calendrier/vue/glisser.js": "./calendrier/vue/glisser.js?v=0.1.0",
-    "./calendrier/vue/heures.js": "./calendrier/vue/heures.js?v=0.1.0",
-    "./calendrier/vue/horaire.js": "./calendrier/vue/horaire.js?v=0.1.0",
-    "./calendrier/vue/liste-jour.js": "./calendrier/vue/liste-jour.js?v=0.1.0",
-    "./calendrier/vue/plateau.js": "./calendrier/vue/plateau.js?v=0.1.0",
-    "./calendrier/vue/saisie.js": "./calendrier/vue/saisie.js?v=0.1.0",
-    "./calendrier/vue/semaines.js": "./calendrier/vue/semaines.js?v=0.1.0",
-    "./kit/js/ambiance-message.js": "./kit/js/ambiance-message.js?v=0.1.0",
-    "./kit/js/ambiance-pose.js": "./kit/js/ambiance-pose.js?v=0.1.0",
-    "./kit/js/ambiance.js": "./kit/js/ambiance.js?v=0.1.0",
-    "./kit/js/color-dialog.js": "./kit/js/color-dialog.js?v=0.1.0",
-    "./kit/js/color-math.js": "./kit/js/color-math.js?v=0.1.0",
-    "./kit/js/color-palette.js": "./kit/js/color-palette.js?v=0.1.0",
-    "./kit/js/color-strings.js": "./kit/js/color-strings.js?v=0.1.0",
-    "./kit/js/dialogs.js": "./kit/js/dialogs.js?v=0.1.0",
-    "./kit/js/dom.js": "./kit/js/dom.js?v=0.1.0",
-    "./kit/js/gfs-link.js": "./kit/js/gfs-link.js?v=0.1.0",
-    "./kit/js/host.js": "./kit/js/host.js?v=0.1.0",
-    "./kit/js/i18n.js": "./kit/js/i18n.js?v=0.1.0",
-    "./kit/js/layers.js": "./kit/js/layers.js?v=0.1.0",
-    "./kit/js/modal-base.js": "./kit/js/modal-base.js?v=0.1.0",
-    "./kit/js/once.js": "./kit/js/once.js?v=0.1.0",
-    "./kit/js/theme.js": "./kit/js/theme.js?v=0.1.0"
+    "./app/chrome.js": "./app/chrome.js?v=0.1.1",
+    "./app/demo.js": "./app/demo.js?v=0.1.1",
+    "./app/main.js": "./app/main.js?v=0.1.1",
+    "./app/reglages.js": "./app/reglages.js?v=0.1.1",
+    "./app/textes.js": "./app/textes.js?v=0.1.1",
+    "./kit/js/ambiance-message.js": "./kit/js/ambiance-message.js?v=0.1.1",
+    "./kit/js/ambiance-pose.js": "./kit/js/ambiance-pose.js?v=0.1.1",
+    "./kit/js/ambiance.js": "./kit/js/ambiance.js?v=0.1.1",
+    "./kit/js/calendrier/index.js": "./kit/js/calendrier/index.js?v=0.1.1",
+    "./kit/js/calendrier/lien-kit.js": "./kit/js/calendrier/lien-kit.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/dates.js": "./kit/js/calendrier/noyau/dates.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/deplacement.js": "./kit/js/calendrier/noyau/deplacement.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/evenements.js": "./kit/js/calendrier/noyau/evenements.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/format.js": "./kit/js/calendrier/noyau/format.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/horaire.js": "./kit/js/calendrier/noyau/horaire.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/navigation.js": "./kit/js/calendrier/noyau/navigation.js?v=0.1.1",
+    "./kit/js/calendrier/noyau/placement.js": "./kit/js/calendrier/noyau/placement.js?v=0.1.1",
+    "./kit/js/calendrier/textes.js": "./kit/js/calendrier/textes.js?v=0.1.1",
+    "./kit/js/calendrier/vue/barre.js": "./kit/js/calendrier/vue/barre.js?v=0.1.1",
+    "./kit/js/calendrier/vue/flottant.js": "./kit/js/calendrier/vue/flottant.js?v=0.1.1",
+    "./kit/js/calendrier/vue/glisser.js": "./kit/js/calendrier/vue/glisser.js?v=0.1.1",
+    "./kit/js/calendrier/vue/heures.js": "./kit/js/calendrier/vue/heures.js?v=0.1.1",
+    "./kit/js/calendrier/vue/horaire.js": "./kit/js/calendrier/vue/horaire.js?v=0.1.1",
+    "./kit/js/calendrier/vue/liste-jour.js": "./kit/js/calendrier/vue/liste-jour.js?v=0.1.1",
+    "./kit/js/calendrier/vue/plateau.js": "./kit/js/calendrier/vue/plateau.js?v=0.1.1",
+    "./kit/js/calendrier/vue/saisie.js": "./kit/js/calendrier/vue/saisie.js?v=0.1.1",
+    "./kit/js/calendrier/vue/semaines.js": "./kit/js/calendrier/vue/semaines.js?v=0.1.1",
+    "./kit/js/color-dialog.js": "./kit/js/color-dialog.js?v=0.1.1",
+    "./kit/js/color-math.js": "./kit/js/color-math.js?v=0.1.1",
+    "./kit/js/color-palette.js": "./kit/js/color-palette.js?v=0.1.1",
+    "./kit/js/color-strings.js": "./kit/js/color-strings.js?v=0.1.1",
+    "./kit/js/dialogs.js": "./kit/js/dialogs.js?v=0.1.1",
+    "./kit/js/dom.js": "./kit/js/dom.js?v=0.1.1",
+    "./kit/js/gfs-link.js": "./kit/js/gfs-link.js?v=0.1.1",
+    "./kit/js/host.js": "./kit/js/host.js?v=0.1.1",
+    "./kit/js/i18n.js": "./kit/js/i18n.js?v=0.1.1",
+    "./kit/js/layers.js": "./kit/js/layers.js?v=0.1.1",
+    "./kit/js/modal-base.js": "./kit/js/modal-base.js?v=0.1.1",
+    "./kit/js/once.js": "./kit/js/once.js?v=0.1.1",
+    "./kit/js/theme.js": "./kit/js/theme.js?v=0.1.1"
   }
 }
 </script>
@@ -63,6 +63,6 @@
 <div id="app">
   <div id="calendrier"></div>
 </div>
-<script type="module" src="app/main.js?v=0.1.0"></script>
+<script type="module" src="app/main.js?v=0.1.1"></script>
 </body>
 </html>

@@ -14,7 +14,13 @@ function lister(dossier, filtre, relatif = '') {
 }
 const code = texte => texte.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1').replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, "''").replace(/`(?:[^`\\]|\\.)*`/g, '``');
 const scripts = lister('app', /\.js$/);
-const feuilles = ['css/app.css', ...lister('calendrier', /\.css$/)];
+const feuilles = ['css/app.css'];
+
+test('le module du calendrier est celui du kit : plus de dossier calendrier/ ici, la page lie sa feuille et l\'importe', () => {
+  assert.throws(() => readdirSync(new URL('calendrier', racine)));
+  assert.match(lire('index.html'), /kit\/css\/calendrier\.css\?v=/);
+  assert.match(lire('app/main.js'), /kit\/js\/calendrier\/index\.js/);
+});
 
 test('l\'app : pas de console, pas de window.onmessage, pas de HTML par chaîne, pas d\'attribut style, stockage dans un try/catch', () => {
   assert.ok(scripts.length >= 4);
@@ -30,7 +36,7 @@ test('l\'app : pas de console, pas de window.onmessage, pas de HTML par chaîne,
 
 test('l\'app n\'importe que le kit, le module et elle-même, jamais une autre app', () => {
   for (const chemin of scripts) {
-    for (const [, cible] of lire(chemin).matchAll(/^\s*import\s[^;]*?from\s+'([^']+)'/gm)) assert.match(cible, /^\.\.?\/(\.\.\/)?(kit\/js|calendrier|app)?\/?[A-Za-z0-9_./-]*\.js$/, `${chemin} importe ${cible}`);
+    for (const [, cible] of lire(chemin).matchAll(/^\s*import\s[^;]*?from\s+'([^']+)'/gm)) assert.match(cible, /^\.\.?\/(\.\.\/)?(kit\/js|app)?\/?[A-Za-z0-9_./-]*\.js$/, `${chemin} importe ${cible}`);
   }
 });
 
@@ -54,7 +60,7 @@ test('aucun fichier ou dossier du site ne commence par « _ » ou « . » (hors 
 
 test('index.html : la carte d\'importation, l\'empreinte et les ?v= sont à jour (node outils/versionner.mjs)', () => {
   const version = JSON.parse(lire('package.json')).version;
-  const fichiers = ['app', 'calendrier', 'kit/js'].flatMap(d => lister(d, /\.js$/)).sort();
+  const fichiers = ['app', 'kit/js'].flatMap(d => lister(d, /\.js$/)).sort();
   const html = lire('index.html');
   assert.equal(versionner(html, version, fichiers), html, 'relancez node outils/versionner.mjs');
   assert.match(html, new RegExp(`app/main\\.js\\?v=${version.replace(/\./g, '\\.')}`));
