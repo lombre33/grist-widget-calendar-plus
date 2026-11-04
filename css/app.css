@@ -1,0 +1,23 @@
+/* La page de l'app autonome : le cadre, le logo Grist Factory et la roue des Réglages dans le coin haut droit (charte, section 1 « Marque »), la gouttière de la barre de GFS. */
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
+#app { position: relative; box-sizing: border-box; height: 100%; min-height: 100vh;
+  padding: var(--app-g-haut, 0px) var(--app-g-droite, 0px) var(--app-g-bas, 0px) var(--app-g-gauche, 0px);
+  --cal-reserve-droite: 64px; }
+#calendrier { height: 100%; }
+/* Le logo : un rond de 20 px, opacité .85, à 10 px du coin ; la roue juste avant lui. Ils se calent sur la ligne de la barre du calendrier (28 px de haut, 8 px de marge). */
+#app-logo { position: absolute; z-index: var(--z-floating-toolbar); top: calc(12px + var(--app-g-haut, 0px)); right: calc(10px + var(--app-g-droite, 0px)); width: 20px; height: 20px; border-radius: 50%; opacity: .85; }
+#app-reglages { position: absolute; z-index: var(--z-floating-toolbar); top: calc(8px + var(--app-g-haut, 0px)); right: calc(36px + var(--app-g-droite, 0px)); width: 28px; height: 28px; padding: 0; border: 1px solid transparent; border-radius: var(--radius-sm, 7px); background: transparent; color: var(--text-muted); cursor: pointer; }
+#app-reglages:hover { background: var(--surface-sunken); color: var(--text); }
+#app-reglages:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+#app-reglages::before { content: ""; display: block; width: 18px; height: 18px; margin: 4px; background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3.2'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E"); mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3.2'/%3E%3Cpath d='M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z'/%3E%3C/svg%3E"); -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-size: contain; mask-size: contain; }
+.reglages-groupe { margin: 0 0 14px; }
+.reglages-groupe h4 { margin: 0 0 6px; font-size: 12px; color: var(--text-muted); font-weight: 650; }
+.reglages-groupe select { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm, 7px); padding: 5px 8px; min-width: 160px; }
+.reglages-groupe select:disabled { opacity: .55; cursor: not-allowed; }
+.reglages-raison { margin: 6px 0 0; font-size: 12px; color: var(--text-muted); }
+.reglages-credits { display: grid; grid-template-columns: max-content 1fr; gap: 4px 12px; margin: 0; font-size: 13px; }
+.reglages-credits dt { color: var(--text-muted); }
+.reglages-credits dd { margin: 0; }
+.reglages-credits a { color: var(--accent-ink); }
+.demo-bandeau { position: absolute; z-index: var(--z-floating-toolbar); bottom: 8px; left: 50%; transform: translateX(-50%); max-width: 90%; padding: 4px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border-strong); box-shadow: var(--shadow-card); color: var(--text-muted); font-size: 12px; text-align: center; }

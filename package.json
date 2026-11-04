@@ -1,13 +1,13 @@
 {
   "name": "grist-widget-calendar-plus",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "description": "Calendrier+ : widget de calendrier de Grist Factory Suite, qui marche seul et que Tuesday intègre.",
   "license": "GPL-3.0-only",
   "scripts": {
     "test": "node --test \"test/*.test.mjs\"",
-    "test:navigateur": "node --test test/navigateur/essais.test.mjs",
+    "test:navigateur": "node --test \"test/navigateur/*.test.mjs\"",
     "test:fuseaux": "TZ=Europe/Paris node --test \"test/*.test.mjs\" && TZ=America/Los_Angeles node --test \"test/*.test.mjs\" && TZ=Pacific/Auckland node --test \"test/*.test.mjs\""
   }
 }

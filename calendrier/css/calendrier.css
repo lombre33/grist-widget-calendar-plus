@@ -3,7 +3,7 @@
 .cal *, .cal *::before, .cal *::after { box-sizing: border-box; }
 
 /* La barre */
-.cal-barre { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.cal-barre { display: flex; align-items: center; gap: 8px; padding: 8px calc(12px + var(--cal-reserve-droite, 0px)) 8px 12px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
 .cal-titre { margin: 0 4px; font-size: 16px; font-weight: 650; min-width: 9ch; }
 .cal-ressort { flex: 1 1 auto; }
 .cal-fleche, .cal-aujourdhui, .cal-vue, .cal-plateau-bouton { font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm, 7px); padding: 4px 10px; cursor: pointer; min-height: 28px; }

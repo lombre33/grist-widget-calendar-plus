@@ -1,0 +1,21 @@
+// Les textes de l'app autonome (hors module), en français et en anglais ensemble.
+export const TEXTES = {
+  'app.reglages': { fr: 'Réglages', en: 'Settings' },
+  'app.reglagesTitre': { fr: 'Réglages de Calendrier+', en: 'Calendar+ settings' },
+  'app.fermer': { fr: 'Fermer', en: 'Close' },
+  'app.langue': { fr: 'Langue', en: 'Language' },
+  'app.langueFr': { fr: 'Français', en: 'Français' },
+  'app.langueEn': { fr: 'English', en: 'English' },
+  'app.langueGfs': { fr: 'La langue se choisit dans Grist Factory Suite.', en: 'The language is chosen in Grist Factory Suite.' },
+  'app.theme': { fr: 'Thème', en: 'Theme' },
+  'app.themeSysteme': { fr: 'Comme Grist ou le système', en: 'Like Grist or the system' },
+  'app.themeClair': { fr: 'Clair', en: 'Light' },
+  'app.themeSombre': { fr: 'Sombre', en: 'Dark' },
+  'app.credits': { fr: 'Crédits', en: 'Credits' },
+  'app.editeur': { fr: 'Éditeur', en: 'Publisher' },
+  'app.site': { fr: 'Site', en: 'Website' },
+  'app.licence': { fr: 'Licence', en: 'License' },
+  'app.logo': { fr: 'Grist Factory', en: 'Grist Factory' },
+  'app.demo': { fr: 'Démonstration : rien n\'est enregistré.', en: 'Demonstration: nothing is saved.' },
+  'app.demoGrist': { fr: 'Démonstration : la connexion à vos tables Grist arrive. Rien n\'est enregistré.', en: 'Demonstration: the connection to your Grist tables is coming. Nothing is saved.' },
+};
