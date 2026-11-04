@@ -5,15 +5,18 @@
 // Rend { element, definir, aller, aujourdhui, detruire }. Le module ne parle jamais à Grist : il reçoit des lignes ({ id, titre, debut, fin, avecHeure, statut, couleur, responsables,
 // modifiable }, dates en AAAA-MM-JJ ou AAAA-MM-JJTHH:mm) et rend des gestes par les rappels, que l'hôte exécute (docs/plan.md, section 3).
 //   onOuvrir(id) · onDeplacer({ id, debut, fin }) -> promesse (refusée ou `false` : l'événement revient) · onAjouter({ debut, titre }) -> promesse · onEtat({ vue, jourCourant })
-// options : debutSemaine (1 = lundi), vue ('mois' | 'semaine'), jourCourant, langue ('fr' | 'en'), maintenant (horloge injectée), lectureSeule, maxPistes.
+// options : debutSemaine (1 = lundi), vue ('mois' | 'semaine' | 'jour'), jourCourant, langue ('fr' | 'en'), maintenant (horloge injectée), lectureSeule, maxPistes.
 import { h } from './lien-kit.js';
 import { creerTraduction } from './textes.js';
 import { aujourdhui as aujourdhuiDe, estJour } from './noyau/dates.js';
 import { deplacer } from './noyau/deplacement.js';
+import { deplacerHoraire } from './noyau/horaire.js';
 import { normaliser } from './noyau/evenements.js';
 import { jourInitial, lignesDeLaVue, vueValide, voisin } from './noyau/navigation.js';
 import { construireBarre } from './vue/barre.js';
+import { HEURE_AU_DEFILEMENT } from './vue/horaire.js';
 import { construirePlateau } from './vue/plateau.js';
+import { construireVueHoraire } from './vue/heures.js';
 import { construireGrille } from './vue/semaines.js';
 
 // Combien de barres tiennent dans une ligne de la grille : sa hauteur moins le numéro du jour, par barre de 20 px (2 tant que rien n'est mesuré). `options.maxPistes` l'impose.
@@ -76,6 +79,14 @@ export function creerCalendrier(rappels = {}) {
       const resultat = evenement ? deplacer(evenement, enCours.jourSaisi, jour) : null;
       if (resultat) deplacerAvecRetour(resultat);
     },
+    deposerHoraire(jour, minute) {
+      const enCours = glisse.courant;
+      if (!enCours || lectureSeule()) return;
+      const evenement = [...modele.evenements, ...modele.sansDate].find(e => String(e.id) === String(enCours.id));
+      const saisi = enCours.saisi || { jour: enCours.jourSaisi || jour, minute: 0 };
+      const resultat = evenement ? deplacerHoraire(evenement, saisi, { jour, minute }) : null;
+      if (resultat) deplacerAvecRetour(resultat);
+    },
     appliquerCouleur(cible, evenement) {
       if (!evenement.couleur) return;
       if (evenement.couleur.fond) cible.style.setProperty('--cal-fond', evenement.couleur.fond);
@@ -123,11 +134,18 @@ export function creerCalendrier(rappels = {}) {
   function dessiner() {
     const lignesDeVue = lignesDeLaVue(etat.vue, etat.jour, premierJourValide(options.debutSemaine));
     const barre = construireBarre(ctx, { jours: lignesDeVue[0].map(cellule => cellule.jour) });
-    const [entete, corps] = construireGrille(ctx, lignesDeVue);
+    const defile = element.querySelector('.cal-heures');
+    const hautDefile = defile ? defile.scrollTop : null;
+    const principal = etat.vue === 'mois' ? construireGrille(ctx, lignesDeVue) : construireVueHoraire(ctx, lignesDeVue[0]);
     const plateau = etat.plateau && modele.sansDate.length ? construirePlateau(ctx) : null;
     const avis = modele.invalides.length ? h('div', { class: 'cal-avis', role: 'status' }, ctx.t('cal.ecartees', { n: modele.invalides.length })) : null;
     flottant = h('div', { class: 'cal-flottant' });
-    element.replaceChildren(...[barre, avis, h('div', { class: 'cal-milieu' }, h('div', { class: 'cal-principal' }, entete, corps), plateau), flottant].filter(Boolean));
+    element.replaceChildren(...[barre, avis, h('div', { class: 'cal-milieu' }, h('div', { class: `cal-principal cal-vue-${etat.vue}` }, principal), plateau), flottant].filter(Boolean));
+    const heures = element.querySelector('.cal-heures');
+    if (heures) {
+      const etiquette = element.querySelector('.cal-etiquette');
+      heures.scrollTop = hautDefile === null ? HEURE_AU_DEFILEMENT * (etiquette ? etiquette.offsetHeight : 40) - 8 : hautDefile;
+    }
   }
 
   // L'hôte peut demander une vue ou un jour (sa mémoire d'une visite précédente) : pris en compte à la première fois et chaque fois que sa demande change, jamais à chaque rappel.

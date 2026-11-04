@@ -13,7 +13,7 @@ const surTouche = action => touche => {
   if (touche.key === 'Enter' || touche.key === ' ') { touche.preventDefault(); action(); }
 };
 
-function construireEvenement(ctx, segment, jours, zone) {
+export function construireEvenement(ctx, segment, jours, zone) {
   const evenement = segment.evenement;
   const modifiable = !ctx.lectureSeule && evenement.modifiable;
   const classes = ['cal-evt', segment.prolongeAvant ? 'cal-evt-avant' : '', segment.prolongeApres ? 'cal-evt-apres' : '', modifiable ? '' : 'cal-grise'];
@@ -46,7 +46,7 @@ function construireJour(ctx, { jour, dansLeMois }, colonne) {
   return { fond, numero };
 }
 
-function construireZone(ctx, ligne, evenements, maxPistes) {
+export function construireZone(ctx, ligne, evenements, maxPistes) {
   const jours = ligne.map(cellule => cellule.jour);
   const placement = placerSemaine(evenements, jours, { maxPistes });
   const cellules = ligne.map((cellule, colonne) => construireJour(ctx, cellule, colonne));

@@ -229,19 +229,119 @@ test('une ligne non modifiable est grisée et ne glisse pas', async () => {
   await page.close();
 });
 
-test('la vue Semaine : sept jours, le lundi d\'abord, un titre de période ; Jour est grisé avec sa raison', async () => {
+test('la vue Semaine : sept jours, le lundi d\'abord, un titre de période, la bande des jours entiers', async () => {
   const page = await ouvrir();
   await page.getByRole('button', { name: 'Semaine' }).click();
-  assert.equal(await page.locator('.cal-ligne').count(), 1);
   assert.equal(await page.locator('.cal-fond').first().getAttribute('data-jour'), '2026-11-02');
   assert.equal(await page.locator('.cal-fond').last().getAttribute('data-jour'), '2026-11-08');
+  assert.equal(await page.locator('.cal-colonne').count(), 7);
   assert.match(await titre(page), /2.*8 nov.*2026/);
   assert.deepEqual((await appels(page, 'etat')).at(-1), { vue: 'semaine', jourCourant: '2026-11-03' });
+  assert.equal(await page.locator('.cal-bande .cal-evt[data-id="1"]').count(), 1);
   await page.getByRole('button', { name: 'Suivant' }).click();
   assert.equal(await page.locator('.cal-fond').first().getAttribute('data-jour'), '2026-11-09');
-  const jour = page.getByRole('button', { name: 'Jour', exact: true });
-  assert.equal(await jour.getAttribute('aria-disabled'), 'true');
-  assert.equal(await jour.getAttribute('title'), 'La vue Jour arrive avec les heures');
+  await page.close();
+});
+
+test('la vue Jour : une colonne, le jour en toutes lettres, précédent et suivant avancent d\'un jour', async () => {
+  const page = await ouvrir();
+  await page.getByRole('button', { name: 'Jour', exact: true }).click();
+  assert.equal(await titre(page), 'Mardi 3 novembre 2026');
+  assert.equal(await page.locator('.cal-colonne').count(), 1);
+  assert.equal(await page.locator('.cal-bande-jour .cal-evt[data-id="1"]').count(), 1);
+  await page.getByRole('button', { name: 'Suivant' }).click();
+  assert.equal(await titre(page), 'Mercredi 4 novembre 2026');
+  assert.equal(await page.locator('.cal-colonne').getAttribute('data-jour'), '2026-11-04');
+  assert.deepEqual((await appels(page, 'etat')).at(-1), { vue: 'jour', jourCourant: '2026-11-04' });
+  await page.close();
+});
+
+const HEURES = [
+  { id: 20, titre: 'Point équipe', debut: '2026-11-03T09:30', fin: '2026-11-03T10:30' },
+  { id: 21, titre: 'Atelier', debut: '2026-11-03T10:00', fin: '2026-11-03T12:00' },
+  { id: 22, titre: 'Déjeuner', debut: '2026-11-05T12:00', fin: '2026-11-05T14:00' },
+  { id: 23, titre: 'Sans heure', debut: '2026-11-04' },
+  { id: 24, titre: 'À caser' },
+];
+const boite = (page, selecteur) => page.locator(selecteur).boundingBox();
+
+test('les blocs horaires : à leur heure, de leur durée, côte à côte quand ils se chevauchent', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  const colonne = await boite(page, '.cal-colonne[data-jour="2026-11-03"]');
+  assert.equal(Math.round(colonne.height), 960);
+  const [a, b, dejeuner] = [await boite(page, '.cal-bloc[data-id="20"]'), await boite(page, '.cal-bloc[data-id="21"]'), await boite(page, '.cal-bloc[data-id="22"]')];
+  assert.equal(Math.round(a.y - colonne.y), 380);
+  assert.equal(Math.round(a.height), 40);
+  assert.equal(Math.round(b.y - colonne.y), 400);
+  assert.equal(Math.round(b.height), 80);
+  assert.ok(Math.abs(a.width - colonne.width / 2) < 2 && Math.abs(b.width - colonne.width / 2) < 2);
+  assert.ok(b.x > a.x);
+  const colonneJeudi = await boite(page, '.cal-colonne[data-jour="2026-11-05"]');
+  assert.equal(Math.round(dejeuner.y - colonneJeudi.y), 480);
+  assert.ok(Math.abs(dejeuner.width - colonneJeudi.width) < 2);
+  assert.match(await page.locator('.cal-bloc[data-id="20"]').innerText(), /09:30\s*Point équipe/);
+  assert.equal(await page.locator('.cal-bloc[data-id="23"]').count(), 0);
+  assert.equal(await page.locator('.cal-bande .cal-evt[data-id="23"]').count(), 1);
+  await page.close();
+});
+
+test('la grille horaire s\'ouvre vers 7 h et défile', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  const defile = await page.locator('.cal-heures').evaluate(e => e.scrollTop);
+  assert.ok(defile > 250 && defile < 290, String(defile));
+  await page.close();
+});
+
+test('glisser un bloc : le jour et l\'heure changent, la durée est gardée, au quart d\'heure', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  await page.dragAndDrop('.cal-bloc[data-id="22"]', '.cal-colonne[data-jour="2026-11-06"]', { sourcePosition: { x: 10, y: 20 }, targetPosition: { x: 20, y: 510 } });
+  assert.deepEqual(await appels(page, 'deplacer'), [{ id: 22, debut: '2026-11-06T12:15', fin: '2026-11-06T14:15' }]);
+  await page.waitForSelector('.cal-colonne[data-jour="2026-11-06"] .cal-bloc[data-id="22"]');
+  await page.close();
+});
+
+test('glisser un bloc refusé par l\'hôte le ramène à sa place', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  await page.evaluate(() => { essai.reponse = 'refus'; });
+  await page.dragAndDrop('.cal-bloc[data-id="22"]', '.cal-colonne[data-jour="2026-11-06"]', { sourcePosition: { x: 10, y: 20 }, targetPosition: { x: 20, y: 500 } });
+  await page.waitForFunction(() => essai.appels.some(a => a.nom === 'deplacer'));
+  await page.waitForSelector('.cal-colonne[data-jour="2026-11-05"] .cal-bloc[data-id="22"]');
+  assert.equal(await page.locator('.cal-colonne[data-jour="2026-11-06"] .cal-bloc').count(), 0);
+  await page.close();
+});
+
+test('une tâche sans date déposée dans la grille reçoit l\'heure déposée et une heure de durée', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  await page.locator('.cal-plateau-bouton').click();
+  await page.dragAndDrop('.cal-puce[data-id="24"]', '.cal-colonne[data-jour="2026-11-04"]', { targetPosition: { x: 20, y: 440 } });
+  assert.deepEqual(await appels(page, 'deplacer'), [{ id: 24, debut: '2026-11-04T11:00', fin: '2026-11-04T12:00' }]);
+  await page.close();
+});
+
+test('un clic dans une colonne vide ajoute à cette heure', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine' } });
+  await page.locator('.cal-colonne[data-jour="2026-11-04"]').click({ position: { x: 20, y: 14 * 40 + 5 } });
+  await page.keyboard.type('Rappel client');
+  await page.keyboard.press('Enter');
+  assert.deepEqual(await appels(page, 'ajouter'), [{ debut: '2026-11-04T14:00', titre: 'Rappel client' }]);
+  await page.close();
+});
+
+test('un clic sur un bloc ouvre la tâche ; en lecture seule le bloc est grisé et ne glisse pas', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'semaine', lectureSeule: true } });
+  await page.locator('.cal-bloc[data-id="22"]').click();
+  assert.deepEqual(await appels(page, 'ouvrir'), [22]);
+  assert.equal(await page.locator('.cal-bloc[data-id="22"]').getAttribute('draggable'), null);
+  assert.match(await page.locator('.cal-bloc[data-id="22"]').getAttribute('title'), /Lecture seule/);
+  await page.close();
+});
+
+test('en vue Jour, la bande des jours entiers reçoit un dépôt et un clic ajoute un jour entier', async () => {
+  const page = await ouvrir({ lignes: HEURES, options: { vue: 'jour', jourCourant: '2026-11-04' } });
+  await page.locator('.cal-bande-jour').click({ position: { x: 300, y: 28 } });
+  await page.keyboard.type('Toute la journée');
+  await page.keyboard.press('Enter');
+  assert.deepEqual(await appels(page, 'ajouter'), [{ debut: '2026-11-04', titre: 'Toute la journée' }]);
   await page.close();
 });
 

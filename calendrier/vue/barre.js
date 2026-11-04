@@ -1,6 +1,6 @@
 // La barre du haut : précédent / suivant, le titre de la période, « Aujourd'hui », le choix de la vue, le plateau « Sans date ».
 import { h } from '../lien-kit.js';
-import { titreDeSemaine, titreDuMois } from '../noyau/format.js';
+import { libelleJour, majuscule, titreDeSemaine, titreDuMois } from '../noyau/format.js';
 
 function bouton(classe, texte, { aria, actif, desactive, titre, action, pressed }) {
   return h('button', {
@@ -18,12 +18,12 @@ function fleche(sens, ctx) {
 
 function choixDeVue(ctx) {
   const vue = nom => bouton('cal-vue', ctx.t(`cal.${nom}`), { actif: ctx.etat.vue === nom, pressed: ctx.etat.vue === nom, action: () => ctx.changerVue(nom) });
-  const jour = bouton('cal-vue', ctx.t('cal.jour'), { desactive: true, titre: ctx.t('cal.jourBientot'), action: () => {} });
-  return h('div', { class: 'cal-vues', role: 'group', 'aria-label': ctx.t('cal.vues') }, vue('mois'), vue('semaine'), jour);
+  return h('div', { class: 'cal-vues', role: 'group', 'aria-label': ctx.t('cal.vues') }, vue('mois'), vue('semaine'), vue('jour'));
 }
 
 export function construireBarre(ctx, { jours }) {
-  const titre = ctx.etat.vue === 'semaine' ? titreDeSemaine(jours, ctx.langue) : titreDuMois(ctx.etat.jour, ctx.langue);
+  const titres = { semaine: () => titreDeSemaine(jours, ctx.langue), jour: () => majuscule(libelleJour(ctx.etat.jour, ctx.langue)), mois: () => titreDuMois(ctx.etat.jour, ctx.langue) };
+  const titre = titres[ctx.etat.vue]();
   const nombre = ctx.modele.sansDate.length;
   return h('div', { class: 'cal-barre' },
     fleche(-1, ctx),

@@ -8,7 +8,6 @@ export const TEXTES = {
   'cal.mois': { fr: 'Mois', en: 'Month' },
   'cal.semaine': { fr: 'Semaine', en: 'Week' },
   'cal.jour': { fr: 'Jour', en: 'Day' },
-  'cal.jourBientot': { fr: 'La vue Jour arrive avec les heures', en: 'The Day view comes with hours' },
   'cal.vues': { fr: 'Vue du calendrier', en: 'Calendar view' },
   'cal.sansDate': { fr: 'Sans date', en: 'No date' },
   'cal.sansDateTitre': { fr: 'Tâches sans date', en: 'Tasks without a date' },

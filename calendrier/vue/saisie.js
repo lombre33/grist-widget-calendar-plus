@@ -3,7 +3,8 @@ import { h } from '../lien-kit.js';
 import { libelleJour } from '../noyau/format.js';
 import { poserPres } from './flottant.js';
 
-export function ouvrirSaisie(ctx, { jour, cellule }) {
+// `debut` : le moment envoyé (le jour par défaut, ou jour + heure dans la grille horaire) ; `decalage` : où poser le champ sous le haut de `cellule` (le bas de la cellule par défaut).
+export function ouvrirSaisie(ctx, { jour, cellule, debut = jour, decalage }) {
   const couche = ctx.flottant;
   fermerSaisie(couche);
   let envoi = false;
@@ -16,7 +17,7 @@ export function ouvrirSaisie(ctx, { jour, cellule }) {
     envoi = true;
     champ.setAttribute('aria-busy', 'true');
     try {
-      await ctx.ajouter({ debut: jour, titre });
+      await ctx.ajouter({ debut, titre });
       fermer();
     } catch (erreur) {
       champ.removeAttribute('aria-busy');
@@ -29,7 +30,7 @@ export function ouvrirSaisie(ctx, { jour, cellule }) {
     else if (touche.key === 'Escape') { touche.stopPropagation(); fermer(); }
   });
   champ.addEventListener('blur', () => { if (!envoi) fermer(); });
-  poserPres(boite, couche, cellule, { decalage: Math.max(0, cellule.getBoundingClientRect().height - 32), largeurMin: 150 });
+  poserPres(boite, couche, cellule, { decalage: decalage === undefined ? Math.max(0, cellule.getBoundingClientRect().height - 32) : decalage, largeurMin: 150 });
   champ.focus();
 }
 
