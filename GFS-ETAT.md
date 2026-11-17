@@ -1,6 +1,6 @@
 # GFS-ETAT : Calendrier+
 
-Mis à jour le 2026-11-04, au commit `9d8fe29` (le dernier commit de code que cette page décrit : l'app monte le module du kit).
+Mis à jour le 2026-11-17 (consignes 013 à 016 relues), au commit `9d8fe29` (le dernier commit de code que cette page décrit : l'app monte le module du kit).
 
 ## Consignes
 - 006 · lue · voie A : le module s'écrit dans `calendrier/` de ce dépôt, GFS le déplace dans le kit (`js/calendrier/index.js`, `css/calendrier.css`) ; porte d'entrée accordée avec Tuesday : `creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller, aujourdhui, detruire }` (`docs/plan.md`, section 3) ; tous les imports du kit passent par un seul fichier, `calendrier/lien-kit.js`
@@ -11,6 +11,9 @@ Mis à jour le 2026-11-04, au commit `9d8fe29` (le dernier commit de code que ce
 
 - 012 · faite · `9d8fe29` · `kit/` à `336baf4` (0.8.0), `calendrier/` retiré, la page importe `kit/js/calendrier/index.js` et lie `kit/css/calendrier.css?v=`, essais de l'hôte gardés (`test/app.test.mjs`, `test/navigateur/app.test.mjs`) ; la réserve du logo et de la roue à droite de la barre du calendrier est dans `css/app.css`, pas dans le module
 - 013 · lue · la consigne est pour Tuesday ; chez Calendrier+, rien n'est en attente d'enregistrement (la démonstration n'écrit nulle part) : à rejouer quand l'adaptateur Grist existera (une saisie rapide ou un déplacement en cours d'écriture devra finir avant `{ ferme: true }`)
+- 014 · lue · chez Calendrier+ (qui parle à GFS par le kit), elle se fait avec la 013 à l'arrivée de l'adaptateur Grist : `kit/` à `eaa2ae2` (0.9.0) ou plus récent, puis `GfsLink.onClose` qui attend les écritures en cours avant de rendre `true` ; aujourd'hui rien n'est écrit dans Grist, donc rien à brancher ; `kit/` reste à `336baf4`
+- 015 · remplacée par la 016 (non lue)
+- 016 · lue · aucun code : Calendrier+ n'écrit aucun fichier, aucune colonne `Auteur`, `Visibilite`, `Personnes` ni `Espace` ; quand l'adaptateur existera, elle tolérera `GFS_Auteur` (ni lue ni écrite) et dira le refus d'écriture d'une ligne qu'on ne fait que lire
 
 ## Changements qui touchent GFS
 - Aucun (pas de `gfs.json` ni de table ; Calendrier+ n'en crée aucune ; clés de réglages préfixées `cal_`, clés de stockage `cal_*`)
