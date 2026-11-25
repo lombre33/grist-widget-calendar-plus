@@ -1,6 +1,6 @@
 # GFS-ETAT : Calendrier+
 
-Mis à jour le 2026-11-17 (consignes 013 à 016 relues), au commit `9d8fe29` (le dernier commit de code que cette page décrit : l'app monte le module du kit).
+Mis à jour le 2026-11-25 (règles de sécurité 017 à 019, à la demande du porteur), au commit `77591f8` (le dernier commit de code que cette page décrit : l'app monte le module du kit).
 
 ## Consignes
 - 006 · lue · voie A : le module s'écrit dans `calendrier/` de ce dépôt, GFS le déplace dans le kit (`js/calendrier/index.js`, `css/calendrier.css`) ; porte d'entrée accordée avec Tuesday : `creerCalendrier(rappels)` rend `{ element, definir({ lignes, options }), aller, aujourdhui, detruire }` (`docs/plan.md`, section 3) ; tous les imports du kit passent par un seul fichier, `calendrier/lien-kit.js`
@@ -14,12 +14,32 @@ Mis à jour le 2026-11-17 (consignes 013 à 016 relues), au commit `9d8fe29` (le
 - 014 · lue · chez Calendrier+ (qui parle à GFS par le kit), elle se fait avec la 013 à l'arrivée de l'adaptateur Grist : `kit/` à `eaa2ae2` (0.9.0) ou plus récent, puis `GfsLink.onClose` qui attend les écritures en cours avant de rendre `true` ; aujourd'hui rien n'est écrit dans Grist, donc rien à brancher ; `kit/` reste à `336baf4`
 - 015 · remplacée par la 016 (non lue)
 - 016 · lue · aucun code : Calendrier+ n'écrit aucun fichier, aucune colonne `Auteur`, `Visibilite`, `Personnes` ni `Espace` ; quand l'adaptateur existera, elle tolérera `GFS_Auteur` (ni lue ni écrite) et dira le refus d'écriture d'une ligne qu'on ne fait que lire
+- 017 à 019 · faites par choix du porteur (25/11) · elles sont posées à Tuesday ; Calendrier+ en tient les règles : `kit/` à `ed0a575` (kit 0.27.0, commit à part `d4bce4c`), relais S8 en tête de `app/main.js`, `.github/dependabot.yml`, `SECURITY.md`, phrase `localStorage` dans un `README.md` nouveau, sections ci-dessous ; essais : `test/securite.test.mjs` (11) ; Calendrier+ 0.1.2
 
 ## Changements qui touchent GFS
-- Aucun (pas de `gfs.json` ni de table ; Calendrier+ n'en crée aucune ; clés de réglages préfixées `cal_`, clés de stockage `cal_*`)
+- 2026-11-25 · `77591f8` · `kit/` à `ed0a575` ; relais S8 démarré ; `.github/dependabot.yml`, `SECURITY.md` et `README.md` ajoutés ; version 0.1.2 ; rien d'autre (pas de `gfs.json`, pas de table)
+- Aucun autre (pas de `gfs.json` ni de table ; Calendrier+ n'en crée aucune ; clés de réglages préfixées `cal_`, clés de stockage `cal_*`)
 
 ## Questions pour GFS
 - Aucune pour l'instant
 
 ## Demandes à GFS
 - Aucune. Constats de GFS (012, point 4), sans changement demandé pour l'instant : à 658 px la barre d'outils passe sur deux lignes en vue Jour ; la sixième semaine du mois est coupée par le bas du panneau à 700 × 400 (elle se rejoint à la molette). Si le porteur veut les changer : demande ici, avec le commit.
+
+## Adresses que l'app appelle
+- https://docs.getgrist.com/grist-plugin-api.js · script · le script d'API des widgets de Grist, permis par la politique pour l'adaptateur Grist à venir ; **la page ne le charge pas encore** · envoie des données de la personne : non
+- aucune autre : `connect-src` et `img-src` (avec `data:`) n'ouvrent que `'self'` ; le reste est fermé par `default-src 'none'`
+
+## Bibliothèques que l'app charge elle-même
+- aucune : le module du calendrier est dans le kit, sous-module de ce dépôt servi par notre site ; le script d'API de Grist n'est pas encore chargé
+
+## Sécurité
+- S1 · tenue · balise `<meta http-equiv="Content-Security-Policy">` dans `index.html`, empreinte refaite par `outils/versionner.mjs` ; essais dans `test/securite.test.mjs`
+- S2 · tenue · `default-src 'none'`, `object-src`, `base-uri`, `form-action` et `frame-src` à `'none'`
+- S3 · tenue · aucune adresse ouverte hors `'self'` et `data:` ; Calendrier+ n'appelle pas le serveur de Grist avec un jeton
+- S4 · tenue · `script-src` : `'self'`, `'unsafe-eval'` (règle 11), l'adresse entière du script d'API de Grist et l'empreinte de la carte d'importation ; aucun `'unsafe-inline'`
+- S5 · tenue · aucune bibliothèque de l'extérieur aujourd'hui
+- S6 · tenue · aucune donnée envoyée ailleurs (l'app n'écrit encore rien dans Grist), ni mesure d'audience, ni journal d'erreurs ; aucun secret dans le dépôt
+- S7 · en cours, prévue le 26/11 · `.github/dependabot.yml` suit le sous-module du kit chaque semaine ; le porteur l'active sur le dépôt live (`grist-factory`)
+- S8 · tenue · kit 0.27.0 (25/11/2026), import en tête de `app/main.js` ; reste à le mesurer dans GFS
+- S9 · en cours, prévue le 26/11 · `SECURITY.md` est à la racine ; le porteur active « Private vulnerability reporting » sur le dépôt live
