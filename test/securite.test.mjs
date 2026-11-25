@@ -48,8 +48,8 @@ test('S8 : le relais des appels bloqués est la première ligne du module d\'ent
 });
 
 test('la référence du kit est le commit ed0a575 (kit 0.27.0) ou un commit qui le contient', () => {
-  const racine = new URL('..', import.meta.url).pathname;
-  const reference = execFileSync('git', ['-C', racine, 'ls-files', '-s', 'kit'], { encoding: 'utf8' }).split(/\s+/)[1];
+  const root = new URL('..', import.meta.url).pathname;
+  const reference = execFileSync('git', ['-C', root, 'ls-files', '-s', 'kit'], { encoding: 'utf8' }).split(/\s+/)[1];
   assert.match(reference, /^[0-9a-f]{40}$/);
   const kit = JSON.parse(lire('kit/package.json'));
   const [maj, min] = kit.version.split('.').map(Number);
@@ -82,5 +82,5 @@ test('les clés dites dans le README sont celles que le code écrit', () => {
 });
 
 test('aucun stockage de navigateur autre que localStorage : ni sessionStorage, ni IndexedDB, ni cookie', () => {
-  for (const f of ['app/main.js', 'app/chrome.js', 'app/reglages.js']) assert.doesNotMatch(lire(f), /sessionStorage|indexedDB|document\.cookie/, f);
+  for (const f of ['app/main.js', 'app/chrome.js', 'app/settings.js']) assert.doesNotMatch(lire(f), /sessionStorage|indexedDB|document\.cookie/, f);
 });

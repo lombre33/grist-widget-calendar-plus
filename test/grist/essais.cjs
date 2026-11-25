@@ -49,9 +49,9 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
     return { doc, cadre };
   };
   const enregistrer = async cadre => {
-    await cadre.waitForSelector('#app-fenetre-colonnes .pp-modal-box', { state: 'visible' });
-    await cadre.click('#app-fenetre-colonnes .pp-modal-primary');
-    await cadre.waitForSelector('#app-fenetre-colonnes .pp-modal-box', { state: 'hidden' });
+    await cadre.waitForSelector('#app-columns-window .pp-modal-box', { state: 'visible' });
+    await cadre.click('#app-columns-window .pp-modal-primary');
+    await cadre.waitForSelector('#app-columns-window .pp-modal-box', { state: 'hidden' });
     await cadre.waitForSelector('.cal-evt');
   };
   // Grist garde les réglages du widget en attente : son bouton « Enregistrer » de la vue les écrit dans le document.
@@ -62,7 +62,7 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
 
   await essai('premier lancement : la fenêtre des colonnes s\'ouvre avec les colonnes reconnues, rien n\'est écrit avant « Enregistrer »', async () => {
     const { doc, cadre } = await ouvrirCal();
-    await cadre.waitForSelector('#app-fenetre-colonnes .pp-modal-box', { state: 'visible' });
+    await cadre.waitForSelector('#app-columns-window .pp-modal-box', { state: 'visible' });
     const choisi = async role => cadre.locator(`#col-${role}`).inputValue();
     assert.deepEqual([await choisi('table'), await choisi('title'), await choisi('start'), await choisi('end'), await choisi('color'), await choisi('person')], ['Evenements', 'Titre', 'Debut', 'Fin', 'Type', 'Qui']);
     assert.equal(await cadre.locator('#col-start option[value="Note"]').isDisabled(), true, 'une colonne de texte est grisée pour Début, pas retirée');
@@ -70,7 +70,7 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
     assert.ok(!sections.some(s => String(s.fields.options || '').includes('cal_mapping')), 'aucun réglage écrit à l\'ouverture');
     await shot('colonnes');
     await enregistrer(cadre);
-    assert.match(await cadre.locator('.app-avis').innerText(), /Enregistrer/, 'l\'avis dit de garder le choix dans Grist');
+    assert.match(await cadre.locator('.app-notice').innerText(), /Enregistrer/, 'l\'avis dit de garder le choix dans Grist');
     const attente = await doc.api.table(doc.id, '_grist_Views_section');
     assert.ok(!attente.some(s => String(s.fields.options || '').includes('cal_mapping')), 'Grist garde le réglage en attente de son propre « Enregistrer »');
     await garderDansGrist();
@@ -91,7 +91,7 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
     await shot('mois');
     const cadre2 = await ouvrir(labo, doc);
     await cadre2.waitForSelector('.cal-evt');
-    assert.equal(await cadre2.locator('#app-fenetre-colonnes .pp-modal-box').isVisible().catch(() => false), false, 'pas de fenêtre au second lancement');
+    assert.equal(await cadre2.locator('#app-columns-window .pp-modal-box').isVisible().catch(() => false), false, 'pas de fenêtre au second lancement');
   });
 
   await essai('glisser : Début et Fin décalés du même écart, rien d\'autre n\'est écrit', async () => {
@@ -127,10 +127,10 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
 
   await essai('DateTime : l\'heure du fuseau de la colonne (9 h 30 à Paris pour 8 h 30 UTC en hiver, 10 h 30 en été)', async () => {
     const { doc, cadre } = await ouvrirCal();
-    await cadre.waitForSelector('#app-fenetre-colonnes .pp-modal-box', { state: 'visible' });
+    await cadre.waitForSelector('#app-columns-window .pp-modal-box', { state: 'visible' });
     await cadre.selectOption('#col-end', '');
     await cadre.selectOption('#col-start', 'Heure');
-    await cadre.click('#app-fenetre-colonnes .pp-modal-primary');
+    await cadre.click('#app-columns-window .pp-modal-primary');
     const atelier = cadre.locator('.cal-evt', { hasText: 'Atelier' }).first();
     await atelier.waitFor();
     const texte = await atelier.innerText();
@@ -143,8 +143,8 @@ const gens = { id: 'Gens', colonnes: [{ id: 'Nom', type: 'Text' }], lignes: { No
 
   await essai('accès « Lire la table » seulement : l\'avis demande l\'accès complet, rien n\'est écrit', async () => {
     const { cadre } = await ouvrirCal({ acces: 'read table' });
-    await cadre.waitForSelector('.app-avis:not([hidden])');
-    assert.match(await cadre.locator('.app-avis').innerText(), /accès complet/i);
+    await cadre.waitForSelector('.app-notice:not([hidden])');
+    assert.match(await cadre.locator('.app-notice').innerText(), /accès complet/i);
     await shot('acces');
   });
 

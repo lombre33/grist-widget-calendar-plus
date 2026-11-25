@@ -96,8 +96,8 @@ export function addAction(tableId, { debut, titre }, { mapping, columns }) {
 // Un refus de Grist en clé de message : la personne lit pourquoi, jamais le texte brut de l'erreur.
 export function refusalReason(error) {
   const text = String(error?.message ?? error ?? '');
-  if (/formula|formule/i.test(text)) return 'refus.formule';
-  if (/access|permission|denied|read-only|readonly|blocked by access rules/i.test(text)) return 'refus.droit';
-  if (/table introuvable|column .* not found|KeyError|Invalid column|absente/i.test(text)) return 'refus.colonne';
-  return 'refus.autre';
+  if (/formula|formule/i.test(text)) return 'refusal.formula';
+  if (/access|permission|denied|read-only|readonly|blocked by access rules/i.test(text)) return 'refusal.rights';
+  if (/table introuvable|column .* not found|KeyError|Invalid column|absente/i.test(text)) return 'refusal.column';
+  return 'refusal.other';
 }

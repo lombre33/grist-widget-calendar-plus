@@ -14,11 +14,11 @@ const SAVED_FLASH_MS = 15000;
 // L'avis que la personne lit sous le calendrier, selon l'état : { key, vars, action } ou null.
 export function noticeFor(state) {
   if (!state || state.status === 'loading') return null;
-  if (state.status === 'access') return { key: 'etat.acces' };
-  if (state.status === 'setup') return { key: 'etat.colonnes', action: 'col.ouvrir' };
-  if (state.status === 'error') return { key: 'etat.erreur' };
-  if (state.unreadable > 0) return { key: 'etat.illisibles', vars: { n: state.unreadable } };
-  if (!state.abilities?.move) return { key: 'etat.formule' };
+  if (state.status === 'access') return { key: 'status.access' };
+  if (state.status === 'setup') return { key: 'status.columns', action: 'col.open' };
+  if (state.status === 'error') return { key: 'status.error' };
+  if (state.unreadable > 0) return { key: 'status.unreadable', vars: { n: state.unreadable } };
+  if (!state.abilities?.move) return { key: 'status.formula' };
   return null;
 }
 
@@ -26,7 +26,7 @@ function readView(GfsLink) {
   try { return GfsLink.storageGet(VIEW_KEY) ?? undefined; } catch (error) { return undefined; }
 }
 
-export function startGrist({ grist, racine, emplacement, I18n, GfsLink, creerCalendrier }) {
+export function startGrist({ grist, root, slot, I18n, GfsLink, creerCalendrier }) {
   const t = (key, vars) => I18n.t(key, vars);
   let state = null;
   let flashKey = null;
@@ -34,14 +34,14 @@ export function startGrist({ grist, racine, emplacement, I18n, GfsLink, creerCal
   let setupShown = false;
   const view = readView(GfsLink);
   const text = h('span');
-  const button = h('button', { type: 'button', class: 'app-avis-action', on: { click: () => columns.open() } });
-  const notice = h('div', { class: 'app-avis', role: 'status' }, text, button);
+  const button = h('button', { type: 'button', class: 'app-notice-action', on: { click: () => columns.open() } });
+  const notice = h('div', { class: 'app-notice', role: 'status' }, text, button);
   notice.hidden = true;
-  racine.append(notice);
+  root.append(notice);
 
   const source = createSource(createGristPort(grist), { onChange: next => { state = next; render(); } });
   // Grist garde les réglages posés par le widget en attente, avec son propre bouton « Enregistrer » sur la vue (mesuré dans Grist 1.7.19) : on le dit.
-  const columns = createColumnsWindow({ I18n, source, onSaved: () => flash('col.garder', SAVED_FLASH_MS), onError: error => flash(refusalReason(error)) });
+  const columns = createColumnsWindow({ I18n, source, onSaved: () => flash('col.keep', SAVED_FLASH_MS), onError: error => flash(refusalReason(error)) });
 
   function flash(key, duration = FLASH_MS) {
     flashKey = key;
@@ -59,13 +59,13 @@ export function startGrist({ grist, racine, emplacement, I18n, GfsLink, creerCal
     }
   };
 
-  const calendrier = creerCalendrier({
+  const calendar = creerCalendrier({
     onOuvrir: id => { try { grist.setCursorPos?.({ rowId: id }); } catch (error) { /* une autre table que celle de la vue : rien à montrer */ } },
     onDeplacer: guarded(({ id, debut, fin }) => source.move(id, { debut, fin })),
     onAjouter: guarded(request => source.add(request)),
     onEtat: ({ vue }) => { try { GfsLink.storageSet(VIEW_KEY, vue); } catch (error) { /* le navigateur refuse : la vue ne sera pas retenue */ } },
   });
-  emplacement.append(calendrier.element);
+  slot.append(calendar.element);
 
   function renderNotice() {
     const shown = flashKey ? { key: flashKey } : noticeFor(state);
@@ -78,7 +78,7 @@ export function startGrist({ grist, racine, emplacement, I18n, GfsLink, creerCal
 
   function render() {
     const ready = state?.status === 'ready';
-    calendrier.definir({ lignes: ready ? state.lines : [], options: { langue: I18n.language, lectureSeule: !(ready && state.abilities.move), vue: view } });
+    calendar.definir({ lignes: ready ? state.lines : [], options: { langue: I18n.language, lectureSeule: !(ready && state.abilities.move), vue: view } });
     renderNotice();
     if (state?.status === 'setup' && !setupShown && !columns.isOpen()) { setupShown = true; columns.open(); }
   }

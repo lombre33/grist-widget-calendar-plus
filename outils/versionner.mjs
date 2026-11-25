@@ -5,14 +5,14 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
-const racine = new URL('../', import.meta.url).pathname;
+const root = new URL('../', import.meta.url).pathname;
 const DOSSIERS = ['app', 'kit/js'];
 
 function modules(dossier, sortie = []) {
   for (const nom of readdirSync(dossier)) {
     const chemin = join(dossier, nom);
     if (statSync(chemin).isDirectory()) modules(chemin, sortie);
-    else if (nom.endsWith('.js')) sortie.push(relative(racine, chemin));
+    else if (nom.endsWith('.js')) sortie.push(relative(root, chemin));
   }
   return sortie;
 }
@@ -32,9 +32,9 @@ export function versionner(html, version, fichiers) {
 }
 
 if (process.argv[1] === new URL(import.meta.url).pathname) {
-  const version = JSON.parse(readFileSync(join(racine, 'package.json'), 'utf8')).version;
-  const fichiers = DOSSIERS.flatMap(d => modules(join(racine, d))).sort();
-  const chemin = join(racine, 'index.html');
+  const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
+  const fichiers = DOSSIERS.flatMap(d => modules(join(root, d))).sort();
+  const chemin = join(root, 'index.html');
   writeFileSync(chemin, versionner(readFileSync(chemin, 'utf8'), version, fichiers));
   process.stdout.write(`index.html : version ${version}, ${fichiers.length} modules\n`);
 }

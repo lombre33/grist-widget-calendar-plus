@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { versionner } from '../outils/versionner.mjs';
 
-const racine = new URL('../', import.meta.url);
-const lire = chemin => readFileSync(new URL(chemin, racine), 'utf8');
+const root = new URL('../', import.meta.url);
+const lire = chemin => readFileSync(new URL(chemin, root), 'utf8');
 function lister(dossier, filtre, relatif = '') {
-  return readdirSync(new URL(`${dossier}/${relatif}`, racine)).flatMap(nom => {
+  return readdirSync(new URL(`${dossier}/${relatif}`, root)).flatMap(nom => {
     const chemin = `${relatif}${nom}`;
-    return statSync(new URL(`${dossier}/${chemin}`, racine)).isDirectory() ? lister(dossier, filtre, `${chemin}/`) : (filtre.test(nom) ? [`${dossier}/${chemin}`] : []);
+    return statSync(new URL(`${dossier}/${chemin}`, root)).isDirectory() ? lister(dossier, filtre, `${chemin}/`) : (filtre.test(nom) ? [`${dossier}/${chemin}`] : []);
   });
 }
 const code = texte => texte.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1').replace(/'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"/g, "''").replace(/`(?:[^`\\]|\\.)*`/g, '``');
@@ -17,7 +17,7 @@ const scripts = lister('app', /\.js$/);
 const feuilles = ['css/app.css'];
 
 test('le module du calendrier est celui du kit : plus de dossier calendrier/ ici, la page lie sa feuille et l\'importe', () => {
-  assert.throws(() => readdirSync(new URL('calendrier', racine)));
+  assert.throws(() => readdirSync(new URL('calendrier', root)));
   assert.match(lire('index.html'), /kit\/css\/calendrier\.css\?v=/);
   assert.match(lire('app/main.js'), /kit\/js\/calendrier\/index\.js/);
 });
@@ -47,15 +47,15 @@ test('les feuilles : aucune couleur ni z-index en dur, des jetons seulement', ()
 test('aucun fichier ou dossier du site ne commence par « _ » ou « . » (hors .nojekyll), et .nojekyll est là', () => {
   const trouves = [];
   const parcourir = (dossier, relatif = '') => {
-    for (const nom of readdirSync(new URL(`${dossier}${relatif}`, racine))) {
+    for (const nom of readdirSync(new URL(`${dossier}${relatif}`, root))) {
       if (['node_modules', '.git', 'test'].includes(nom)) continue;
       if (/^[_.]/.test(nom) && nom !== '.nojekyll' && !(relatif === '' && ['.gitmodules', '.gitignore', '.github'].includes(nom))) trouves.push(`${relatif}${nom}`);
-      if (statSync(new URL(`${dossier}${relatif}${nom}`, racine)).isDirectory() && !/^[_.]/.test(nom) && nom !== 'kit') parcourir(dossier, `${relatif}${nom}/`);
+      if (statSync(new URL(`${dossier}${relatif}${nom}`, root)).isDirectory() && !/^[_.]/.test(nom) && nom !== 'kit') parcourir(dossier, `${relatif}${nom}/`);
     }
   };
   parcourir('');
   assert.deepEqual(trouves, []);
-  assert.equal(readdirSync(racine).includes('.nojekyll'), true);
+  assert.equal(readdirSync(root).includes('.nojekyll'), true);
 });
 
 test('index.html : la carte d\'importation, l\'empreinte et les ?v= sont à jour (node outils/versionner.mjs)', () => {
@@ -73,4 +73,13 @@ test('la politique de sécurité de la page : pas de style en ligne, pas d\'autr
   const sites = [...politique.matchAll(/https?:\/\/[^\s;]+/g)].map(m => m[0]);
   assert.deepEqual(sites, ['https://docs.getgrist.com/grist-plugin-api.js']);
   assert.doesNotMatch(lire('index.html'), /<style|style="/);
+});
+
+test('consigne 020 : le code de app/ est en anglais (fichiers, noms, clés de textes, id et classes) ; seuls les noms du module du kit restent les siens', () => {
+  for (const ancien of ['app/demo.js', 'app/reglages.js', 'app/textes.js']) assert.ok(!scripts.includes(ancien), ancien);
+  const anciens = /\b(racine|emplacement|hebergee|creerReglages|monterCoin|laisserLibre|lignesDeDemonstration|TEXTES|retraduire|ouvrirColonnes|ouvrirReglages|surLangue|calendrier|bandeau|fenetre|remplir|demarrer|hote)\b/;
+  for (const chemin of scripts) assert.doesNotMatch(code(lire(chemin)), anciens, chemin);
+  const tout = [...scripts.map(lire), ...feuilles.map(lire), lire('index.html')].join('\n');
+  assert.doesNotMatch(tout, /'(etat|refus)\.|app\.(reglages|langue|fermer|annuler|editeur|licence)|col\.(titre|ouvrir|aucune|obligatoire|raison|erreur|formule|enregistrer|garder)\b/);
+  assert.doesNotMatch(tout, /\b(app-(reglages|fenetre|ouvrir|avis|colonnes|g-)|colonnes-|reglages-|demo-bandeau)|id="calendrier"/);
 });

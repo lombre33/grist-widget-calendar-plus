@@ -75,10 +75,10 @@ test('addAction : titre et début seulement ; titre vide refusé', () => {
 });
 
 test('refusalReason : la raison lisible d\'un refus de Grist', () => {
-  assert.equal(refusalReason(new Error('Blocked by access rules')), 'refus.droit');
-  assert.equal(refusalReason(new Error('écriture refusée : start (colonne à formule)')), 'refus.formule');
-  assert.equal(refusalReason(new Error('Invalid column "Debut"')), 'refus.colonne');
-  assert.equal(refusalReason('autre chose'), 'refus.autre');
+  assert.equal(refusalReason(new Error('Blocked by access rules')), 'refusal.rights');
+  assert.equal(refusalReason(new Error('écriture refusée : start (colonne à formule)')), 'refusal.formula');
+  assert.equal(refusalReason(new Error('Invalid column "Debut"')), 'refusal.column');
+  assert.equal(refusalReason('autre chose'), 'refusal.other');
 });
 
 test('fermer : oui tout de suite sans écriture en cours ; après la fin d\'une écriture ; non si elle ne finit pas à temps', async () => {

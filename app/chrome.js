@@ -2,23 +2,23 @@
 // recouvre un bord du cadre, est laissée libre par une gouttière de son épaisseur (le logo et la roue suivent, puisqu'ils sont ancrés sur le cadre).
 import { h } from '../kit/js/dom.js';
 
-const BORDS = { haut: '--app-g-haut', droite: '--app-g-droite', bas: '--app-g-bas', gauche: '--app-g-gauche' };
+const EDGES = { haut: '--app-gutter-top', droite: '--app-gutter-right', bas: '--app-gutter-bottom', gauche: '--app-gutter-left' };
 
-export function monterCoin(racine, { t, ouvrirReglages }) {
-  const roue = h('button', { type: 'button', id: 'app-reglages', title: t('app.reglages'), 'aria-label': t('app.reglages'), on: { click: ouvrirReglages } });
+export function mountCorner(root, { t, openSettings }) {
+  const gear = h('button', { type: 'button', id: 'app-settings', title: t('app.settings'), 'aria-label': t('app.settings'), on: { click: openSettings } });
   const logo = h('img', { id: 'app-logo', src: 'img/grist-factory-logo.jpg', alt: t('app.logo'), width: '20', height: '20' });
-  racine.append(roue, logo);
+  root.append(gear, logo);
   return {
-    retraduire() {
-      roue.title = t('app.reglages');
-      roue.setAttribute('aria-label', t('app.reglages'));
+    retranslate() {
+      gear.title = t('app.settings');
+      gear.setAttribute('aria-label', t('app.settings'));
       logo.alt = t('app.logo');
     },
   };
 }
 
 // Ce que la barre de GFS recouvre ({ bord, epaisseur, zone }, ou null) : une gouttière du côté du bord, de l'épaisseur de la barre.
-export function laisserLibre(racine, barre) {
-  for (const variable of Object.values(BORDS)) racine.style.setProperty(variable, '0px');
-  if (barre && BORDS[barre.bord]) racine.style.setProperty(BORDS[barre.bord], `${Math.round(barre.epaisseur)}px`);
+export function keepClear(root, bar) {
+  for (const cssVar of Object.values(EDGES)) root.style.setProperty(cssVar, '0px');
+  if (bar && EDGES[bar.bord]) root.style.setProperty(EDGES[bar.bord], `${Math.round(bar.epaisseur)}px`);
 }

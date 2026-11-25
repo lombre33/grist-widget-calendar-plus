@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-const racine = path.resolve(__dirname, '../..');
+const root = path.resolve(__dirname, '../..');
 const GRIST = process.env.CAL_GRIST || 'http://localhost:8484';
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json' };
 
@@ -13,8 +13,8 @@ function serveur() {
   return new Promise(resolve => {
     const s = http.createServer((req, res) => {
       const url = new URL(req.url, 'http://x');
-      const f = path.join(racine, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
-      if (!f.startsWith(racine) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
+      const f = path.join(root, url.pathname === '/' ? 'index.html' : decodeURIComponent(url.pathname));
+      if (!f.startsWith(root) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
       res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream' });
       fs.createReadStream(f).pipe(res);
     }).listen(0, () => resolve(s));
