@@ -7,7 +7,7 @@ function liste(options, valeur, surChangement, desactive) {
   return choix;
 }
 
-export function creerReglages({ I18n, Theme, hebergee, surLangue }) {
+export function creerReglages({ I18n, Theme, hebergee, surLangue, ouvrirColonnes = null }) {
   const t = (cle, variables) => I18n.t(cle, variables);
   const fenetre = ModalBase.create({ id: 'app-fenetre-reglages', titleId: 'app-reglages-titre', size: 'sm' });
   const fermer = h('button', { type: 'button', class: 'pp-modal-primary', on: { click: () => fenetre.hide() } });
@@ -25,7 +25,10 @@ export function creerReglages({ I18n, Theme, hebergee, surLangue }) {
       h('dt', null, t('app.editeur')), h('dd', null, 'Grist Factory'),
       h('dt', null, t('app.site')), h('dd', null, h('a', { href: 'https://grist-factory.fr', target: '_blank', rel: 'noopener noreferrer' }, 'grist-factory.fr')),
       h('dt', null, t('app.licence')), h('dd', null, 'GNU GPL v3.0')));
-    fenetre.body.replaceChildren(langue, theme, credits);
+    // Dans Grist : la table et les colonnes que lit le calendrier (la fenêtre des colonnes, qui n'enregistre qu'à son bouton « Enregistrer »).
+    const colonnes = ouvrirColonnes ? h('div', { class: 'reglages-groupe' }, h('h4', null, t('col.titre')),
+      h('button', { type: 'button', id: 'app-ouvrir-colonnes', on: { click: () => { fenetre.hide(); ouvrirColonnes(); } } }, t('col.ouvrir'))) : null;
+    fenetre.body.replaceChildren(...[colonnes, langue, theme, credits].filter(Boolean));
   }
   return {
     ouvrir() { remplir(); fenetre.show(); },

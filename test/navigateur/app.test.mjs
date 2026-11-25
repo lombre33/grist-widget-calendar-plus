@@ -31,6 +31,8 @@ after(async () => { await navigateur?.close(); serveur?.close(); });
 async function ouvrir({ langue = 'fr' } = {}) {
   const contexte = await navigateur.newContext({ viewport: { width: 700, height: 400 }, locale: langue });
   const page = await contexte.newPage();
+  // Le script d'API de Grist vient de docs.getgrist.com, que le navigateur d'essai ne joint pas : un script vide le remplace. Hors de Grist, l'app ne s'en sert pas (elle n'a pas de cadre parent).
+  await page.route('https://docs.getgrist.com/grist-plugin-api.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: '' }));
   const erreurs = [];
   page.on('pageerror', erreur => erreurs.push(String(erreur)));
   page.on('console', message => { if (['error', 'warning'].includes(message.type())) erreurs.push(message.text()); });
