@@ -154,7 +154,13 @@ test('la barre de GFS : une gouttière du côté qu\'elle recouvre, le logo et l
 test('la démonstration marche : glisser une tâche la déplace, ajouter une tâche l\'ajoute, rien n\'est enregistré', async () => {
   const page = await ouvrir();
   const avant = await page.locator('.cal-evt').count();
-  await page.locator('.cal-fond').nth(30).click();
+  // Une case libre : les lignes de démonstration suivent la date du jour, une case choisie par son rang tombait sous un événement certains jours.
+  const libre = await page.evaluate(() => [...document.querySelectorAll('.cal-fond')].findIndex(c => {
+    const r = c.getBoundingClientRect();
+    return r.top > 0 && r.bottom < innerHeight && document.elementFromPoint(r.left + r.width / 2, r.bottom - 4) === c;
+  }));
+  assert.ok(libre >= 0, 'aucune case libre visible');
+  await page.locator('.cal-fond').nth(libre).click();
   await page.keyboard.type('Nouvelle tâche');
   await page.keyboard.press('Enter');
   await page.waitForFunction(n => document.querySelectorAll('.cal-evt').length > n, avant);

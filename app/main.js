@@ -1,5 +1,7 @@
 // Point d'entrée de Calendrier+ seul : thème et langue d'abord (sinon la page s'affiche en clair, en français, puis bascule), l'ambiance de GFS, le lien avec GFS, puis le calendrier.
 // Cette version montre le module sur des lignes de démonstration ; la connexion aux tables de Grist vient ensuite (docs/plan.md, lot 7).
+// Le relais des appels que la politique de sécurité de la page bloque (règle S8, kit 0.25.0) : en tête, avant que les autres modules s'évaluent.
+import '../kit/js/violations-start.js';
 import { Ambiance } from '../kit/js/ambiance.js';
 import { h } from '../kit/js/dom.js';
 import { GfsLink } from '../kit/js/gfs-link.js';

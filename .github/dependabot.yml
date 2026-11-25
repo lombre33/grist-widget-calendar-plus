@@ -1,0 +1,7 @@
+# Dépendances suivies (règle S7 de GFS) : le kit commun est un sous-module, Dependabot propose d'avancer sa référence.
+version: 2
+updates:
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"

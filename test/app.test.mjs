@@ -49,7 +49,7 @@ test('aucun fichier ou dossier du site ne commence par « _ » ou « . » (hors 
   const parcourir = (dossier, relatif = '') => {
     for (const nom of readdirSync(new URL(`${dossier}${relatif}`, racine))) {
       if (['node_modules', '.git', 'test'].includes(nom)) continue;
-      if (/^[_.]/.test(nom) && nom !== '.nojekyll' && !(relatif === '' && ['.gitmodules', '.gitignore'].includes(nom))) trouves.push(`${relatif}${nom}`);
+      if (/^[_.]/.test(nom) && nom !== '.nojekyll' && !(relatif === '' && ['.gitmodules', '.gitignore', '.github'].includes(nom))) trouves.push(`${relatif}${nom}`);
       if (statSync(new URL(`${dossier}${relatif}${nom}`, racine)).isDirectory() && !/^[_.]/.test(nom) && nom !== 'kit') parcourir(dossier, `${relatif}${nom}/`);
     }
   };
